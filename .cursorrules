@@ -1,0 +1,10 @@
+# Project: Graduation Guestbook Web App
+# Framework: React (Vite)
+# Backend: Firebase (Auth & Firestore)
+# Styling: Tailwind CSS
+
+Use React 19, Tailwind and Firebase.
+
+You can reach firebase config at ".env".
+
+You can use the following colors to use your school's brand identity. The school's logo is also located in the public/img/ folder. : #aa2d3a
