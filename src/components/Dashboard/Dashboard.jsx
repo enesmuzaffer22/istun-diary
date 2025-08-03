@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { db } from "../../firebase/config";
 import {
@@ -25,9 +25,11 @@ import {
   Gift,
   Sparkles,
   Eye,
+  QrCode,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import ProfileSettings from "./ProfileSettings";
+import QRCode from "qrcode";
 
 export default function Dashboard() {
   const { currentUser, logout } = useAuth();
@@ -40,6 +42,8 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("dashboard"); // "dashboard" veya "settings"
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [revealedEntries, setRevealedEntries] = useState(new Set());
+  const [showQRCode, setShowQRCode] = useState(false);
+  const qrCodeRef = useRef(null);
 
   useEffect(() => {
     if (!currentUser) return;
@@ -150,6 +154,71 @@ export default function Dashboard() {
     setRevealedEntries((prev) => new Set([...prev, entryId]));
   };
 
+  const generateQRCode = async () => {
+    console.log("QR kod oluşturma başladı", {
+      inviteLink,
+      hasRef: !!qrCodeRef.current,
+    });
+
+    if (!inviteLink) {
+      console.error("Davet linki bulunamadı");
+      alert("Önce davet linki oluşturmalısınız!");
+      return;
+    }
+
+    // Önce state'i true yap ki container görünsün
+    setShowQRCode(true);
+
+    // setTimeout kullanarak DOM'un güncellenmesini bekle
+    setTimeout(async () => {
+      if (!qrCodeRef.current) {
+        console.error("QR kod ref bulunamadı");
+        return;
+      }
+
+      try {
+        // QR kod container'ını temizle
+        qrCodeRef.current.innerHTML = "QR kod oluşturuluyor...";
+        console.log("QR kod container temizlendi");
+
+        // QR kod oluştur
+        console.log("QR kod oluşturuluyor...");
+        const qrCodeDataURL = await QRCode.toDataURL(inviteLink, {
+          width: 200,
+          margin: 2,
+          color: {
+            dark: "#aa2d3a",
+            light: "#ffffff",
+          },
+          errorCorrectionLevel: "H",
+        });
+
+        console.log(
+          "QR kod DataURL oluşturuldu:",
+          qrCodeDataURL.substring(0, 50) + "..."
+        );
+
+        // Container'ı tekrar temizle ve QR kodu ekle
+        qrCodeRef.current.innerHTML = "";
+
+        // QR kodu img elementi olarak ekle
+        const img = document.createElement("img");
+        img.src = qrCodeDataURL;
+        img.className = "rounded-lg w-full h-auto";
+        img.alt = "QR Kod";
+        qrCodeRef.current.appendChild(img);
+
+        console.log("QR kod DOM'a eklendi");
+      } catch (error) {
+        console.error("QR kod oluşturulamadı:", error);
+        if (qrCodeRef.current) {
+          qrCodeRef.current.innerHTML =
+            "QR kod oluşturulamadı. Hata: " + error.message;
+        }
+      }
+    }, 100); // 100ms gecikme ile DOM'un güncellenmesini bekle
+  };
+
   // Close mobile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = () => {
@@ -179,57 +248,63 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-gradient-to-r from-[#aa2d3a] via-red-600 to-pink-600 shadow-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-16 sm:h-20">
             {/* Logo and Title */}
-            <div className="flex items-center">
-              <BookOpen className="w-8 h-8 text-[#aa2d3a] mr-3" />
-              <h1 className="text-xl font-bold text-gray-900 hidden sm:block">
-                İSTÜN Hatıra Defteri
-              </h1>
-              <h1 className="text-lg font-bold text-gray-900 sm:hidden">
-                İSTÜN
-              </h1>
+            <div className="flex items-center animate-fade-in">
+              <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30 shadow-lg mr-3 hover:scale-110 transition-transform duration-300">
+                <BookOpen className="w-6 h-6 text-white animate-pulse" />
+              </div>
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold text-white drop-shadow-md hidden sm:block">
+                  İSTÜN Hatıra Defteri
+                </h1>
+                <h1 className="text-lg font-bold text-white drop-shadow-md sm:hidden">
+                  İSTÜN
+                </h1>
+                <p className="text-xs sm:text-sm text-white/90 font-medium hidden sm:block">
+                  Hoş geldin, {userProfile?.name}
+                </p>
+              </div>
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-4">
-              <span className="text-sm text-gray-600">
-                Hoş geldin, {userProfile?.name}
-              </span>
+            <div className="hidden md:flex items-center space-x-2">
               <button
                 onClick={() => setActiveTab("dashboard")}
-                className={`flex items-center transition-colors ${
+                className={`flex items-center px-3 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 ${
                   activeTab === "dashboard"
-                    ? "text-[#aa2d3a]"
-                    : "text-gray-600 hover:text-[#aa2d3a]"
+                    ? "bg-white/20 text-white shadow-lg backdrop-blur-sm"
+                    : "text-white/80 hover:text-white hover:bg-white/10"
                 }`}
                 title="Hatıra Defteri"
               >
-                <BookOpen className="w-5 h-5 mr-1" />
-                <span className="hidden lg:inline">Hatıra Defteri</span>
+                <BookOpen className="w-5 h-5 mr-2" />
+                <span className="hidden lg:inline font-medium">
+                  Hatıra Defteri
+                </span>
               </button>
               <button
                 onClick={() => setActiveTab("settings")}
-                className={`flex items-center transition-colors ${
+                className={`flex items-center px-3 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 ${
                   activeTab === "settings"
-                    ? "text-[#aa2d3a]"
-                    : "text-gray-600 hover:text-[#aa2d3a]"
+                    ? "bg-white/20 text-white shadow-lg backdrop-blur-sm"
+                    : "text-white/80 hover:text-white hover:bg-white/10"
                 }`}
                 title="Profil Ayarları"
               >
-                <Settings className="w-5 h-5 mr-1" />
-                <span className="hidden lg:inline">Ayarlar</span>
+                <Settings className="w-5 h-5 mr-2" />
+                <span className="hidden lg:inline font-medium">Ayarlar</span>
               </button>
               <button
                 onClick={handleLogout}
-                className="flex items-center text-gray-600 hover:text-[#aa2d3a] transition-colors"
+                className="flex items-center px-3 py-2 rounded-lg text-white/80 hover:text-white hover:bg-red-500/20 transition-all duration-300 transform hover:scale-105"
               >
-                <LogOut className="w-5 h-5 mr-1" />
-                <span className="hidden lg:inline">Çıkış</span>
+                <LogOut className="w-5 h-5 mr-2" />
+                <span className="hidden lg:inline font-medium">Çıkış</span>
               </button>
             </div>
 
@@ -240,7 +315,7 @@ export default function Dashboard() {
                   e.stopPropagation();
                   setShowMobileMenu(!showMobileMenu);
                 }}
-                className="text-gray-600 hover:text-[#aa2d3a] transition-colors"
+                className="p-2 rounded-lg bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-all duration-300 transform hover:scale-110"
               >
                 {showMobileMenu ? (
                   <X className="w-6 h-6" />
@@ -254,30 +329,24 @@ export default function Dashboard() {
           {/* Mobile Navigation Menu */}
           {showMobileMenu && (
             <div
-              className="md:hidden border-t border-gray-200 py-4"
+              className="md:hidden border-t border-white/30 py-4 animate-slide-down"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex flex-col space-y-3">
-                {/* User Greeting */}
-                <div className="px-2 py-2 text-sm text-gray-600 border-b border-gray-100">
-                  Hoş geldin,{" "}
-                  <span className="font-medium">{userProfile?.name}</span>
-                </div>
-
+              <div className="flex flex-col space-y-2">
                 {/* Hatıra Defteri */}
                 <button
                   onClick={() => {
                     setActiveTab("dashboard");
                     setShowMobileMenu(false);
                   }}
-                  className={`flex items-center px-2 py-2 hover:bg-gray-50 transition-colors rounded-lg ${
+                  className={`flex items-center px-3 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 ${
                     activeTab === "dashboard"
-                      ? "text-[#aa2d3a]"
-                      : "text-gray-600 hover:text-[#aa2d3a]"
+                      ? "bg-white/20 text-white shadow-lg backdrop-blur-sm"
+                      : "text-white/80 hover:text-white hover:bg-white/10"
                   }`}
                 >
                   <BookOpen className="w-5 h-5 mr-3" />
-                  Hatıra Defteri
+                  <span className="font-medium">Hatıra Defteri</span>
                 </button>
 
                 {/* Profile Settings */}
@@ -286,14 +355,14 @@ export default function Dashboard() {
                     setActiveTab("settings");
                     setShowMobileMenu(false);
                   }}
-                  className={`flex items-center px-2 py-2 hover:bg-gray-50 transition-colors rounded-lg ${
+                  className={`flex items-center px-3 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 ${
                     activeTab === "settings"
-                      ? "text-[#aa2d3a]"
-                      : "text-gray-600 hover:text-[#aa2d3a]"
+                      ? "bg-white/20 text-white shadow-lg backdrop-blur-sm"
+                      : "text-white/80 hover:text-white hover:bg-white/10"
                   }`}
                 >
                   <Settings className="w-5 h-5 mr-3" />
-                  Profil Ayarları
+                  <span className="font-medium">Profil Ayarları</span>
                 </button>
 
                 {/* Logout */}
@@ -302,10 +371,10 @@ export default function Dashboard() {
                     handleLogout();
                     setShowMobileMenu(false);
                   }}
-                  className="flex items-center px-2 py-2 text-gray-600 hover:text-[#aa2d3a] hover:bg-gray-50 transition-colors rounded-lg"
+                  className="flex items-center px-3 py-3 text-white/80 hover:text-white hover:bg-red-500/20 transition-all duration-300 transform hover:scale-105 rounded-lg"
                 >
                   <LogOut className="w-5 h-5 mr-3" />
-                  Çıkış Yap
+                  <span className="font-medium">Çıkış Yap</span>
                 </button>
               </div>
             </div>
@@ -319,12 +388,14 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
             {/* Sol Panel - Davet Linki */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-4 sm:mb-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                  <Share2 className="w-5 h-5 mr-2 text-[#aa2d3a]" />
+              <div className="bg-gradient-to-br from-white to-blue-50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-4 sm:p-6 mb-4 sm:mb-6 border border-blue-100 animate-fade-in">
+                <h2 className="text-lg font-semibold bg-gradient-to-r from-[#aa2d3a] to-pink-600 bg-clip-text text-transparent mb-4 flex items-center">
+                  <div className="w-8 h-8 bg-gradient-to-r from-[#aa2d3a] to-pink-600 rounded-lg flex items-center justify-center mr-3 shadow-md">
+                    <Share2 className="w-5 h-5 text-white" />
+                  </div>
                   Defterini Paylaş
                 </h2>
-                <p className="text-gray-600 text-sm mb-4">
+                <p className="text-gray-600 text-sm mb-4 leading-relaxed">
                   Arkadaşlarının defterine yazı yazabilmesi için davet linkini
                   paylaş.
                 </p>
@@ -332,62 +403,117 @@ export default function Dashboard() {
                 {!showInviteLink ? (
                   <button
                     onClick={generateInviteLink}
-                    className="w-full bg-[#aa2d3a] text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center"
+                    className="w-full bg-gradient-to-r from-[#aa2d3a] to-pink-600 text-white py-3 px-4 rounded-xl hover:scale-105 transition-all duration-300 flex items-center justify-center font-medium shadow-lg hover:shadow-xl"
                   >
-                    <Plus className="w-4 h-4 mr-2" />
+                    <Plus className="w-5 h-5 mr-2" />
                     Davet Linki Oluştur
                   </button>
                 ) : (
                   <div className="space-y-3">
-                    <div className="bg-gray-50 p-3 rounded-lg border">
-                      <p className="text-xs text-gray-500 mb-1">
+                    <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl border border-blue-200 shadow-inner">
+                      <p className="text-xs text-blue-600 mb-2 font-medium">
                         Davet Linkin:
                       </p>
-                      <p className="text-sm font-mono break-all">
+                      <p className="text-sm font-mono break-all text-gray-700 bg-white p-2 rounded-lg border">
                         {inviteLink}
                       </p>
                     </div>
-                    <button
-                      onClick={copyInviteLink}
-                      className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center"
-                    >
-                      {copied ? (
-                        <>
-                          <CheckCircle className="w-4 h-4 mr-2 text-green-600" />
-                          Kopyalandı!
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-4 h-4 mr-2" />
-                          Linki Kopyala
-                        </>
-                      )}
-                    </button>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        onClick={copyInviteLink}
+                        className={`py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center font-medium shadow-md hover:shadow-lg transform hover:scale-105 ${
+                          copied
+                            ? "bg-gradient-to-r from-green-500 to-emerald-600 text-white"
+                            : "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300"
+                        }`}
+                      >
+                        {copied ? (
+                          <>
+                            <CheckCircle className="w-4 h-4 mr-1" />
+                            <span className="hidden sm:inline">
+                              Kopyalandı!
+                            </span>
+                            <span className="sm:hidden">✓</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-4 h-4 mr-1" />
+                            <span className="hidden sm:inline">Kopyala</span>
+                            <span className="sm:hidden">Kopyala</span>
+                          </>
+                        )}
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          console.log("QR kod butonuna tıklandı");
+                          generateQRCode();
+                        }}
+                        className="py-3 px-4 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 text-white hover:from-purple-600 hover:to-indigo-700 transition-all duration-300 flex items-center justify-center font-medium shadow-md hover:shadow-lg transform hover:scale-105"
+                      >
+                        <QrCode className="w-4 h-4 mr-1" />
+                        <span className="hidden sm:inline">QR Kod</span>
+                        <span className="sm:hidden">QR</span>
+                      </button>
+                    </div>
+
+                    {/* QR Kod Gösterimi */}
+                    {showQRCode && (
+                      <div className="mt-4 p-4 bg-white rounded-xl border-2 border-dashed border-purple-300 text-center animate-fade-in">
+                        <p className="text-xs text-purple-600 mb-3 font-medium">
+                          QR Kodu Tarayarak Linke Git:
+                        </p>
+                        <div className="flex justify-center">
+                          <div
+                            ref={qrCodeRef}
+                            className="bg-white p-2 rounded-lg shadow-inner"
+                          ></div>
+                        </div>
+                        <button
+                          onClick={() => setShowQRCode(false)}
+                          className="mt-3 text-xs text-gray-500 hover:text-gray-700 transition-colors"
+                        >
+                          QR Kodu Gizle
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
 
               {/* İstatistikler */}
-              <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <div className="bg-gradient-to-br from-white to-purple-50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-4 sm:p-6 border border-purple-100 animate-fade-in">
+                <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4 flex items-center">
+                  <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center mr-3 shadow-md">
+                    <Calendar className="w-4 h-4 text-white" />
+                  </div>
                   İstatistikler
                 </h3>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm sm:text-base text-gray-600">
-                      Toplam Mesaj
-                    </span>
-                    <span className="font-semibold text-[#aa2d3a] text-lg">
-                      {entries.length}
-                    </span>
+                <div className="space-y-4">
+                  <div className="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-xl border border-orange-200 hover:scale-105 transition-transform duration-300">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm sm:text-base text-gray-700 font-medium flex items-center">
+                        <BookOpen className="w-4 h-4 mr-2 text-orange-600" />
+                        Toplam Mesaj
+                      </span>
+                      <span className="font-bold text-2xl bg-gradient-to-r from-[#aa2d3a] to-red-600 bg-clip-text text-transparent">
+                        {entries.length}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm sm:text-base text-gray-600">
-                      Benzersiz Yazarlar
-                    </span>
-                    <span className="font-semibold text-[#aa2d3a] text-lg">
-                      {new Set(entries.map((entry) => entry.authorEmail)).size}
-                    </span>
+                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-200 hover:scale-105 transition-transform duration-300">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm sm:text-base text-gray-700 font-medium flex items-center">
+                        <User className="w-4 h-4 mr-2 text-blue-600" />
+                        Benzersiz Yazarlar
+                      </span>
+                      <span className="font-bold text-2xl bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                        {
+                          new Set(entries.map((entry) => entry.authorEmail))
+                            .size
+                        }
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -395,33 +521,35 @@ export default function Dashboard() {
 
             {/* Sağ Panel - Mesajlar */}
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-lg shadow-sm">
-                <div className="p-4 sm:p-6 border-b">
-                  <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
+              <div className="bg-gradient-to-br from-white to-pink-50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-pink-100 animate-fade-in">
+                <div className="p-4 sm:p-6 border-b border-pink-200/50">
+                  <h2 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-[#aa2d3a] to-pink-600 bg-clip-text text-transparent flex items-center">
+                    <div className="w-8 h-8 bg-gradient-to-r from-[#aa2d3a] to-pink-600 rounded-lg flex items-center justify-center mr-3 shadow-md">
+                      <BookOpen className="w-4 h-4 text-white" />
+                    </div>
                     Hatıra Defterim
                   </h2>
-                  <p className="text-sm sm:text-base text-gray-600 mt-1">
-                    Arkadaşlarının sana yazdığı mesajlar
+                  <p className="text-sm sm:text-base text-gray-600 mt-2 leading-relaxed">
+                    Arkadaşlarının sana yazdığı özel mesajlar
                   </p>
                 </div>
 
                 <div className="divide-y">
                   {entries.length === 0 ? (
-                    <div className="p-6 sm:p-8 text-center">
-                      <BookOpen className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    <div className="p-6 sm:p-8 text-center animate-fade-in">
+                      <h3 className="text-lg font-medium bg-gradient-to-r from-gray-700 to-gray-900 bg-clip-text text-transparent mb-3">
                         Henüz mesaj yok
                       </h3>
-                      <p className="text-sm sm:text-base text-gray-600">
-                        Davet linkini paylaşarak arkadaşlarının sana mesaj
-                        yazmasını sağla!
+                      <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                        Davet linkini paylaşarak arkadaşlarının sana özel
+                        mesajlar yazmasını sağla!
                       </p>
                     </div>
                   ) : (
                     entries.map((entry) => {
                       const isRevealed = revealedEntries.has(entry.id);
                       return (
-                        <div key={entry.id} className="p-3 sm:p-4 md:p-6">
+                        <div key={entry.id} className="p-3 sm:p-6">
                           <div className="flex items-start space-x-2 sm:space-x-3">
                             <div className="w-8 h-8 sm:w-10 sm:h-10 bg-[#aa2d3a] rounded-full flex items-center justify-center flex-shrink-0">
                               {isRevealed ? (
@@ -431,9 +559,8 @@ export default function Dashboard() {
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
-                              {/* Header - Responsive */}
-                              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 gap-1 sm:gap-0">
-                                <h4 className="text-sm sm:text-base font-medium text-gray-900 truncate">
+                              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 space-y-1 sm:space-y-0">
+                                <h4 className="text-sm sm:text-base font-medium text-gray-900 truncate pr-2">
                                   {isRevealed
                                     ? entry.authorName
                                     : "Sürpriz Mesaj"}
@@ -443,14 +570,7 @@ export default function Dashboard() {
                                   <span className="text-xs sm:text-xs">
                                     {entry.createdAt
                                       ?.toDate()
-                                      .toLocaleDateString("tr-TR", {
-                                        day: "numeric",
-                                        month: "short",
-                                        year:
-                                          window.innerWidth < 640
-                                            ? undefined
-                                            : "numeric",
-                                      })}
+                                      .toLocaleDateString("tr-TR")}
                                   </span>
                                 </div>
                               </div>
@@ -459,7 +579,7 @@ export default function Dashboard() {
                                 <div className="bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-dashed border-purple-200 rounded-lg p-3 sm:p-4 text-center">
                                   <div className="mb-3">
                                     <Sparkles className="w-6 h-6 sm:w-8 sm:h-8 text-purple-500 mx-auto mb-2" />
-                                    <p className="text-xs sm:text-sm text-gray-600 mb-2 leading-relaxed">
+                                    <p className="text-xs sm:text-sm text-gray-600 mb-1 leading-relaxed">
                                       <span className="font-medium">
                                         Birileri
                                       </span>{" "}
@@ -473,42 +593,42 @@ export default function Dashboard() {
                                   </div>
                                   <button
                                     onClick={() => revealSurprise(entry.id)}
-                                    className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg text-sm font-medium hover:from-purple-600 hover:to-pink-600 transition-all transform hover:scale-105 flex items-center justify-center mx-auto w-full sm:w-auto"
+                                    className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg text-sm sm:text-base font-medium hover:from-purple-600 hover:to-pink-600 transition-all transform hover:scale-105 flex items-center mx-auto"
                                   >
-                                    <Gift className="w-4 h-4 mr-2" />
-                                    Sürprizi Aç!
+                                    <Gift className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                                    <span>Sürprizi Aç!</span>
                                   </button>
                                 </div>
                               ) : (
                                 <div className="space-y-2 sm:space-y-3">
-                                  {/* Gönderen Bilgisi - Mobile Optimized */}
+                                  {/* Gönderen Bilgisi */}
                                   <div className="p-2 sm:p-3 bg-blue-50 rounded-lg border border-blue-200 text-center">
                                     <p className="text-xs sm:text-sm text-blue-800">
-                                      <span className="font-bold text-base sm:text-lg">
+                                      <span className="font-bold text-sm sm:text-lg">
                                         🎉 Sürpriz! 🎉
                                       </span>
                                     </p>
                                     <p className="text-xs sm:text-sm text-blue-700 mt-1 leading-relaxed">
                                       Bu mesaj{" "}
-                                      <span className="font-semibold break-words">
+                                      <span className="font-semibold">
                                         {entry.authorName}
                                       </span>{" "}
                                       tarafından gönderildi!
                                     </p>
                                   </div>
 
-                                  {/* Emojiler - Mobile Responsive */}
+                                  {/* Emojiler */}
                                   {entry.emojis && entry.emojis.length > 0 && (
                                     <div className="p-2 sm:p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                                      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                                      <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
                                         <span className="text-xs sm:text-sm font-medium text-yellow-800 text-center sm:text-left">
                                           Arkadaşlık Emojileri:
                                         </span>
-                                        <div className="flex justify-center sm:justify-start space-x-1 sm:space-x-2">
+                                        <div className="flex justify-center sm:justify-start space-x-1 flex-wrap">
                                           {entry.emojis.map((emoji, index) => (
                                             <span
                                               key={index}
-                                              className="text-lg sm:text-xl animate-bounce"
+                                              className="text-lg sm:text-xl animate-bounce inline-block"
                                               style={{
                                                 animationDelay: `${
                                                   index * 0.1
@@ -523,46 +643,11 @@ export default function Dashboard() {
                                     </div>
                                   )}
 
-                                  {/* Mesaj İçeriği - Mobile Optimized */}
-                                  <div className="prose prose-sm max-w-none text-sm sm:text-base leading-relaxed">
-                                    <div className="break-words overflow-wrap-anywhere">
-                                      <ReactMarkdown
-                                        components={{
-                                          p: ({ children }) => (
-                                            <p className="mb-2 last:mb-0">
-                                              {children}
-                                            </p>
-                                          ),
-                                          strong: ({ children }) => (
-                                            <strong className="font-semibold text-gray-900">
-                                              {children}
-                                            </strong>
-                                          ),
-                                          em: ({ children }) => (
-                                            <em className="italic text-gray-700">
-                                              {children}
-                                            </em>
-                                          ),
-                                          ul: ({ children }) => (
-                                            <ul className="list-disc list-inside space-y-1 my-2">
-                                              {children}
-                                            </ul>
-                                          ),
-                                          ol: ({ children }) => (
-                                            <ol className="list-decimal list-inside space-y-1 my-2">
-                                              {children}
-                                            </ol>
-                                          ),
-                                          blockquote: ({ children }) => (
-                                            <blockquote className="border-l-4 border-gray-300 pl-3 italic text-gray-600 my-2">
-                                              {children}
-                                            </blockquote>
-                                          ),
-                                        }}
-                                      >
-                                        {entry.content}
-                                      </ReactMarkdown>
-                                    </div>
+                                  {/* Mesaj İçeriği */}
+                                  <div className="prose prose-sm sm:prose max-w-none text-sm sm:text-base">
+                                    <ReactMarkdown>
+                                      {entry.content}
+                                    </ReactMarkdown>
                                   </div>
                                 </div>
                               )}

@@ -168,10 +168,12 @@ export default function WriteEntry() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#aa2d3a] mx-auto"></div>
-          <p className="mt-4 text-gray-600">Yükleniyor...</p>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 flex items-center justify-center">
+        <div className="text-center animate-fade-in">
+          <div className="w-16 h-16 bg-gradient-to-r from-[#aa2d3a] to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg animate-pulse">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+          </div>
+          <p className="mt-4 text-gray-600 font-medium">Yükleniyor...</p>
         </div>
       </div>
     );
@@ -179,15 +181,20 @@ export default function WriteEntry() {
 
   if (error && !recipient) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full text-center">
-          <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Hata</h2>
-          <p className="text-gray-600 mb-6">{error}</p>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-red-50 to-pink-50 flex items-center justify-center p-4">
+        <div className="bg-gradient-to-br from-white to-red-50 rounded-xl shadow-xl p-8 max-w-md w-full text-center border border-red-100 animate-fade-in">
+          <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+            <AlertCircle className="w-8 h-8 text-white" />
+          </div>
+          <h2 className="text-xl font-semibold bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent mb-3">
+            Hata
+          </h2>
+          <p className="text-gray-600 mb-6 leading-relaxed">{error}</p>
           <button
             onClick={() => navigate("/")}
-            className="bg-[#aa2d3a] text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
+            className="bg-gradient-to-r from-[#aa2d3a] to-pink-600 text-white px-6 py-3 rounded-xl hover:scale-105 transition-all duration-300 font-medium shadow-lg hover:shadow-xl flex items-center justify-center"
           >
+            <ArrowLeft className="w-4 h-4 mr-2" />
             Ana Sayfaya Dön
           </button>
         </div>
@@ -197,40 +204,58 @@ export default function WriteEntry() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full text-center">
-          <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-green-50 to-emerald-50 flex items-center justify-center p-4">
+        <div className="bg-gradient-to-br from-white to-green-50 rounded-xl shadow-xl p-8 max-w-md w-full text-center border border-green-100 animate-fade-in">
+          <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg animate-bounce">
+            <CheckCircle className="w-8 h-8 text-white" />
+          </div>
+          <h2 className="text-xl font-semibold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-3">
             Mesaj Gönderildi!
           </h2>
-          <p className="text-gray-600 mb-6">
-            Mesajın başarıyla {recipient?.name}'in defterine eklendi.
+          <p className="text-gray-600 mb-6 leading-relaxed">
+            Mesajın başarıyla{" "}
+            <span className="font-semibold text-green-600">
+              {recipient?.name}
+            </span>
+            'in defterine eklendi.
           </p>
-          <p className="text-sm text-gray-500">
-            3 saniye içinde ana sayfaya yönlendirileceksin...
-          </p>
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-3 rounded-lg border border-blue-200 mb-4">
+            <p className="text-sm text-blue-600 font-medium">
+              3 saniye içinde ana sayfaya yönlendirileceksin...
+            </p>
+          </div>
+          <div className="flex justify-center">
+            <CheckCircle className="w-12 h-12 text-green-500 animate-bounce" />
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-gradient-to-r from-[#aa2d3a] via-red-600 to-pink-600 shadow-xl">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
+          <div className="flex justify-between items-center h-16 sm:h-20">
+            <div className="flex items-center animate-fade-in">
               <button
                 onClick={() => navigate("/")}
-                className="mr-4 p-2 text-gray-600 hover:text-[#aa2d3a] transition-colors"
+                className="mr-4 p-2 rounded-lg bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-all duration-300 transform hover:scale-110"
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
-              <BookOpen className="w-8 h-8 text-[#aa2d3a] mr-3" />
-              <h1 className="text-xl font-bold text-gray-900">
-                İSTÜN Hatıra Defteri
-              </h1>
+              <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30 shadow-lg mr-3 animate-pulse">
+                <BookOpen className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold text-white drop-shadow-md">
+                  İSTÜN Hatıra Defteri
+                </h1>
+                <p className="text-xs sm:text-sm text-white/90 font-medium">
+                  Mesaj Yazma
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -238,16 +263,16 @@ export default function WriteEntry() {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Recipient Info */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div className="bg-gradient-to-br from-white to-blue-50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 mb-6 border border-blue-100 animate-fade-in">
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-[#aa2d3a] rounded-full flex items-center justify-center mr-4">
+            <div className="w-12 h-12 bg-gradient-to-r from-[#aa2d3a] to-pink-600 rounded-full flex items-center justify-center mr-4 shadow-lg animate-pulse">
               <User className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">
+              <h2 className="text-lg font-semibold bg-gradient-to-r from-[#aa2d3a] to-pink-600 bg-clip-text text-transparent">
                 {recipient?.name}'in Hatıra Defteri
               </h2>
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-600 text-sm leading-relaxed">
                 Bu kişiye özel bir mesaj yazıyorsun
               </p>
             </div>
@@ -255,23 +280,26 @@ export default function WriteEntry() {
         </div>
 
         {/* Write Form */}
-        <div className="bg-white rounded-lg shadow-sm">
-          <div className="p-6 border-b">
+        <div className="bg-gradient-to-br from-white to-purple-50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-purple-100 animate-fade-in">
+          <div className="p-6 border-b border-purple-200/50">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent flex items-center">
+                <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center mr-3 shadow-md">
+                  <Send className="w-4 h-4 text-white" />
+                </div>
                 Mesajını Yaz
               </h3>
               <button
                 onClick={() => setPreviewMode(!previewMode)}
-                className="flex items-center text-sm text-gray-600 hover:text-[#aa2d3a] transition-colors"
+                className="flex items-center text-sm px-3 py-2 rounded-lg bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 hover:from-blue-200 hover:to-purple-200 transition-all duration-300 transform hover:scale-105 border border-blue-200"
               >
-                <Eye className="w-4 h-4 mr-1" />
+                <Eye className="w-4 h-4 mr-2" />
                 {previewMode ? "Düzenle" : "Önizle"}
               </button>
             </div>
-            <p className="text-gray-600 text-sm mt-1">
-              Markdown formatını kullanabilirsin (kalın yazı için **metin**,
-              italik için *metin*)
+            <p className="text-gray-600 text-sm mt-3 leading-relaxed bg-gradient-to-r from-gray-50 to-blue-50 p-3 rounded-lg border border-gray-200">
+              <strong>İpucu:</strong> Markdown formatını kullanabilirsin (kalın
+              yazı için **metin**, italik için *metin*)
             </p>
           </div>
 
@@ -348,18 +376,18 @@ export default function WriteEntry() {
               </p>
 
               {/* Seçilen Emojiler */}
-              <div className="mb-3 p-3 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
-                <p className="text-xs text-gray-600 mb-2">
+              <div className="mb-3 p-2 sm:p-3 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
+                <p className="text-xs text-gray-600 mb-2 text-center sm:text-left">
                   Seçilen Emojiler ({selectedEmojis.length}/3):
                 </p>
-                <div className="flex space-x-2">
+                <div className="flex justify-center sm:justify-start space-x-2 flex-wrap">
                   {selectedEmojis.length === 0 ? (
-                    <span className="text-gray-400 text-sm">
+                    <span className="text-gray-400 text-sm text-center">
                       Henüz emoji seçilmedi
                     </span>
                   ) : (
                     selectedEmojis.map((emoji, index) => (
-                      <span key={index} className="text-2xl">
+                      <span key={index} className="text-xl sm:text-2xl">
                         {emoji}
                       </span>
                     ))
@@ -367,14 +395,14 @@ export default function WriteEntry() {
                 </div>
               </div>
 
-              {/* Emoji Grid - Mobile Responsive */}
-              <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-1 sm:gap-2 p-2 sm:p-3 border border-gray-300 rounded-lg max-h-32 sm:max-h-40 overflow-y-auto">
+              {/* Emoji Grid */}
+              <div className="grid grid-cols-6 sm:grid-cols-8 lg:grid-cols-10 gap-1 sm:gap-2 p-2 sm:p-3 border border-gray-300 rounded-lg max-h-32 sm:max-h-40 overflow-y-auto">
                 {availableEmojis.map((emoji) => (
                   <button
                     key={emoji}
                     type="button"
                     onClick={() => handleEmojiSelect(emoji)}
-                    className={`text-lg sm:text-xl md:text-2xl p-1 sm:p-2 rounded-lg transition-all hover:bg-gray-100 ${
+                    className={`text-lg sm:text-2xl p-1 sm:p-2 rounded-lg transition-all hover:bg-gray-100 ${
                       selectedEmojis.includes(emoji)
                         ? "bg-[#aa2d3a] bg-opacity-10 ring-1 sm:ring-2 ring-[#aa2d3a]"
                         : "hover:scale-110"
@@ -403,11 +431,11 @@ export default function WriteEntry() {
               )}
             </div>
 
-            <div className="flex justify-end">
+            <div className="flex justify-center sm:justify-end">
               <button
                 type="submit"
                 disabled={submitting}
-                className="bg-[#aa2d3a] text-white px-6 py-3 rounded-lg font-medium hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                className="w-full sm:w-auto bg-[#aa2d3a] text-white px-4 sm:px-6 py-3 rounded-lg text-sm sm:text-base font-medium hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
               >
                 {submitting ? (
                   <>
