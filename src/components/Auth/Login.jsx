@@ -28,7 +28,7 @@ export default function Login() {
         await login(data.email, data.password);
       } else {
         await signup(data.email, data.password, data.firstName, data.lastName);
-        setMessage("Kayıt başarılı! Lütfen e-posta adresinizi doğrulayın.");
+        setMessage("Kayıt başarılı! Giriş yapabilirsiniz.");
       }
     } catch (error) {
       setError(error.message);
@@ -139,14 +139,9 @@ export default function Login() {
                 type="email"
                 {...register("email", {
                   required: "E-posta adresi gerekli",
-                  pattern: {
-                    value: /^[a-zA-Z0-9._%+-]+@istun\.edu\.tr$/,
-                    message:
-                      "Sadece @istun.edu.tr uzantılı e-posta adresleri kabul edilir",
-                  },
                 })}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#aa2d3a] focus:border-transparent"
-                placeholder="ad.soyad@istun.edu.tr"
+                placeholder="E-posta adresiniz"
               />
             </div>
             {errors.email && (
@@ -166,15 +161,6 @@ export default function Login() {
                 type="password"
                 {...register("password", {
                   required: "Şifre gerekli",
-                  minLength: {
-                    value: 8,
-                    message: "Şifre en az 8 karakter olmalı",
-                  },
-                  pattern: {
-                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-                    message:
-                      "Şifre en az 1 büyük harf, 1 küçük harf ve 1 rakam içermeli",
-                  },
                 })}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#aa2d3a] focus:border-transparent"
                 placeholder="Şifrenizi girin"

@@ -4,7 +4,6 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
-  sendEmailVerification,
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase/config";
@@ -19,18 +18,7 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // İstun email domaini kontrolü
-  const isValidIstunEmail = (email) => {
-    return email.endsWith("@istun.edu.tr");
-  };
-
   const signup = async (email, password, firstName, lastName) => {
-    if (!isValidIstunEmail(email)) {
-      throw new Error(
-        "Sadece @istun.edu.tr uzantılı e-posta adresleri kabul edilir."
-      );
-    }
-
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
@@ -44,16 +32,10 @@ export function AuthProvider({ children }) {
       });
     }
 
-    await sendEmailVerification(userCredential.user);
     return userCredential;
   };
 
   const login = (email, password) => {
-    if (!isValidIstunEmail(email)) {
-      throw new Error(
-        "Sadece @istun.edu.tr uzantılı e-posta adresleri kabul edilir."
-      );
-    }
     return signInWithEmailAndPassword(auth, email, password);
   };
 
@@ -75,7 +57,6 @@ export function AuthProvider({ children }) {
     signup,
     login,
     logout,
-    isValidIstunEmail,
   };
 
   return (

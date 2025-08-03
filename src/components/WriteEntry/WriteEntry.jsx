@@ -19,6 +19,7 @@ import {
   AlertCircle,
   CheckCircle,
   Eye,
+  Heart,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
@@ -32,6 +33,7 @@ export default function WriteEntry() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
   const [previewMode, setPreviewMode] = useState(false);
+  const [selectedEmojis, setSelectedEmojis] = useState([]);
 
   const {
     register,
@@ -69,8 +71,66 @@ export default function WriteEntry() {
     }
   }, [inviteCode]);
 
+  // Emoji seçimi için sabit emoji listesi
+  const availableEmojis = [
+    "😊",
+    "😄",
+    "🥰",
+    "😍",
+    "🤗",
+    "😎",
+    "🤝",
+    "💫",
+    "⭐",
+    "✨",
+    "🎉",
+    "🎊",
+    "🎈",
+    "🎁",
+    "🌟",
+    "💖",
+    "💕",
+    "❤️",
+    "💙",
+    "💜",
+    "🌈",
+    "🦋",
+    "🌸",
+    "🌺",
+    "🌻",
+    "🎯",
+    "🏆",
+    "👑",
+    "🎭",
+    "🎨",
+    "📚",
+    "✏️",
+    "🎓",
+    "🚀",
+    "💎",
+    "🔥",
+    "💯",
+    "👏",
+    "🙌",
+    "✌️",
+  ];
+
+  const handleEmojiSelect = (emoji) => {
+    if (selectedEmojis.includes(emoji)) {
+      setSelectedEmojis(selectedEmojis.filter((e) => e !== emoji));
+    } else if (selectedEmojis.length < 3) {
+      setSelectedEmojis([...selectedEmojis, emoji]);
+    }
+  };
+
   const onSubmit = async (data) => {
     if (!currentUser || !recipient) return;
+
+    // 3 emoji seçimi kontrolü
+    if (selectedEmojis.length !== 3) {
+      setError("Lütfen arkadaşlığınızı temsil eden tam 3 emoji seçin.");
+      return;
+    }
 
     try {
       setSubmitting(true);
@@ -86,11 +146,14 @@ export default function WriteEntry() {
           currentUser.email.split("@")[0],
         recipientId: recipient.id,
         recipientEmail: recipient.email,
+        emojis: selectedEmojis, // Emoji'leri kaydet
+        isRevealed: false, // Sürpriz için başlangıçta gizli
         createdAt: serverTimestamp(),
       });
 
       setSuccess(true);
       reset();
+      setSelectedEmojis([]);
 
       // 3 saniye sonra ana sayfaya yönlendir
       setTimeout(() => {
@@ -271,6 +334,71 @@ export default function WriteEntry() {
               {errors.content && (
                 <p className="text-red-500 text-sm mt-1">
                   {errors.content.message}
+                </p>
+              )}
+            </div>
+
+            {/* Emoji Seçici */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Arkadaşlığınızı Temsil Eden 3 Emoji Seçin *
+              </label>
+              <p className="text-xs text-gray-500 mb-3">
+                Seçtiğiniz emojiler arkadaşınıza sürpriz olarak gösterilecek!
+              </p>
+
+              {/* Seçilen Emojiler */}
+              <div className="mb-3 p-3 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
+                <p className="text-xs text-gray-600 mb-2">
+                  Seçilen Emojiler ({selectedEmojis.length}/3):
+                </p>
+                <div className="flex space-x-2">
+                  {selectedEmojis.length === 0 ? (
+                    <span className="text-gray-400 text-sm">
+                      Henüz emoji seçilmedi
+                    </span>
+                  ) : (
+                    selectedEmojis.map((emoji, index) => (
+                      <span key={index} className="text-2xl">
+                        {emoji}
+                      </span>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              {/* Emoji Grid - Mobile Responsive */}
+              <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-1 sm:gap-2 p-2 sm:p-3 border border-gray-300 rounded-lg max-h-32 sm:max-h-40 overflow-y-auto">
+                {availableEmojis.map((emoji) => (
+                  <button
+                    key={emoji}
+                    type="button"
+                    onClick={() => handleEmojiSelect(emoji)}
+                    className={`text-lg sm:text-xl md:text-2xl p-1 sm:p-2 rounded-lg transition-all hover:bg-gray-100 ${
+                      selectedEmojis.includes(emoji)
+                        ? "bg-[#aa2d3a] bg-opacity-10 ring-1 sm:ring-2 ring-[#aa2d3a]"
+                        : "hover:scale-110"
+                    } ${
+                      selectedEmojis.length >= 3 &&
+                      !selectedEmojis.includes(emoji)
+                        ? "opacity-50 cursor-not-allowed"
+                        : "cursor-pointer"
+                    }`}
+                    disabled={
+                      selectedEmojis.length >= 3 &&
+                      !selectedEmojis.includes(emoji)
+                    }
+                  >
+                    {emoji}
+                  </button>
+                ))}
+              </div>
+
+              {selectedEmojis.length !== 3 && (
+                <p className="text-red-500 text-sm mt-2">
+                  {selectedEmojis.length === 0
+                    ? "Lütfen 3 emoji seçin"
+                    : `${3 - selectedEmojis.length} emoji daha seçmelisiniz`}
                 </p>
               )}
             </div>

@@ -5,7 +5,6 @@ import {
   collection,
   query,
   where,
-  orderBy,
   onSnapshot,
   doc,
   getDoc,
@@ -23,6 +22,9 @@ import {
   Settings,
   Menu,
   X,
+  Gift,
+  Sparkles,
+  Eye,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import ProfileSettings from "./ProfileSettings";
@@ -37,6 +39,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("dashboard"); // "dashboard" veya "settings"
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [revealedEntries, setRevealedEntries] = useState(new Set());
 
   useEffect(() => {
     if (!currentUser) return;
@@ -77,8 +80,7 @@ export default function Dashboard() {
     // Kullanıcının defterine yazılan mesajları dinle
     const q = query(
       collection(db, "entries"),
-      where("recipientId", "==", currentUser.uid),
-      orderBy("createdAt", "desc")
+      where("recipientId", "==", currentUser.uid)
     );
 
     const unsubscribe = onSnapshot(
@@ -87,6 +89,12 @@ export default function Dashboard() {
         const entriesData = [];
         querySnapshot.forEach((doc) => {
           entriesData.push({ id: doc.id, ...doc.data() });
+        });
+        // Client-side'da sıralama yap
+        entriesData.sort((a, b) => {
+          const aDate = a.createdAt?.toDate?.() || new Date(a.createdAt);
+          const bDate = b.createdAt?.toDate?.() || new Date(b.createdAt);
+          return bDate - aDate;
         });
         setEntries(entriesData);
         setLoading(false);
@@ -136,6 +144,10 @@ export default function Dashboard() {
 
   const handleProfileUpdate = (updatedProfile) => {
     setUserProfile(updatedProfile);
+  };
+
+  const revealSurprise = (entryId) => {
+    setRevealedEntries((prev) => new Set([...prev, entryId]));
   };
 
   // Close mobile menu when clicking outside
@@ -406,31 +418,159 @@ export default function Dashboard() {
                       </p>
                     </div>
                   ) : (
-                    entries.map((entry) => (
-                      <div key={entry.id} className="p-4 sm:p-6">
-                        <div className="flex items-start space-x-3">
-                          <div className="w-10 h-10 bg-[#aa2d3a] rounded-full flex items-center justify-center">
-                            <User className="w-5 h-5 text-white" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between mb-2">
-                              <h4 className="text-sm font-medium text-gray-900">
-                                {entry.authorName}
-                              </h4>
-                              <div className="flex items-center text-xs text-gray-500">
-                                <Calendar className="w-3 h-3 mr-1" />
-                                {entry.createdAt
-                                  ?.toDate()
-                                  .toLocaleDateString("tr-TR")}
-                              </div>
+                    entries.map((entry) => {
+                      const isRevealed = revealedEntries.has(entry.id);
+                      return (
+                        <div key={entry.id} className="p-3 sm:p-4 md:p-6">
+                          <div className="flex items-start space-x-2 sm:space-x-3">
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-[#aa2d3a] rounded-full flex items-center justify-center flex-shrink-0">
+                              {isRevealed ? (
+                                <User className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                              ) : (
+                                <Gift className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                              )}
                             </div>
-                            <div className="prose prose-sm max-w-none">
-                              <ReactMarkdown>{entry.content}</ReactMarkdown>
+                            <div className="flex-1 min-w-0">
+                              {/* Header - Responsive */}
+                              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 gap-1 sm:gap-0">
+                                <h4 className="text-sm sm:text-base font-medium text-gray-900 truncate">
+                                  {isRevealed
+                                    ? entry.authorName
+                                    : "Sürpriz Mesaj"}
+                                </h4>
+                                <div className="flex items-center text-xs text-gray-500 flex-shrink-0">
+                                  <Calendar className="w-3 h-3 mr-1" />
+                                  <span className="text-xs sm:text-xs">
+                                    {entry.createdAt
+                                      ?.toDate()
+                                      .toLocaleDateString("tr-TR", {
+                                        day: "numeric",
+                                        month: "short",
+                                        year:
+                                          window.innerWidth < 640
+                                            ? undefined
+                                            : "numeric",
+                                      })}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {!isRevealed ? (
+                                <div className="bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-dashed border-purple-200 rounded-lg p-3 sm:p-4 text-center">
+                                  <div className="mb-3">
+                                    <Sparkles className="w-6 h-6 sm:w-8 sm:h-8 text-purple-500 mx-auto mb-2" />
+                                    <p className="text-xs sm:text-sm text-gray-600 mb-2 leading-relaxed">
+                                      <span className="font-medium">
+                                        Birileri
+                                      </span>{" "}
+                                      sana özel bir sürpriz mesaj gönderdi!
+                                    </p>
+                                    <p className="text-xs text-gray-500 leading-relaxed px-2">
+                                      Kimden geldiğini, mesajı ve
+                                      arkadaşlığınızı temsil eden emojileri
+                                      görmek için butona tıkla
+                                    </p>
+                                  </div>
+                                  <button
+                                    onClick={() => revealSurprise(entry.id)}
+                                    className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg text-sm font-medium hover:from-purple-600 hover:to-pink-600 transition-all transform hover:scale-105 flex items-center justify-center mx-auto w-full sm:w-auto"
+                                  >
+                                    <Gift className="w-4 h-4 mr-2" />
+                                    Sürprizi Aç!
+                                  </button>
+                                </div>
+                              ) : (
+                                <div className="space-y-2 sm:space-y-3">
+                                  {/* Gönderen Bilgisi - Mobile Optimized */}
+                                  <div className="p-2 sm:p-3 bg-blue-50 rounded-lg border border-blue-200 text-center">
+                                    <p className="text-xs sm:text-sm text-blue-800">
+                                      <span className="font-bold text-base sm:text-lg">
+                                        🎉 Sürpriz! 🎉
+                                      </span>
+                                    </p>
+                                    <p className="text-xs sm:text-sm text-blue-700 mt-1 leading-relaxed">
+                                      Bu mesaj{" "}
+                                      <span className="font-semibold break-words">
+                                        {entry.authorName}
+                                      </span>{" "}
+                                      tarafından gönderildi!
+                                    </p>
+                                  </div>
+
+                                  {/* Emojiler - Mobile Responsive */}
+                                  {entry.emojis && entry.emojis.length > 0 && (
+                                    <div className="p-2 sm:p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                                      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                                        <span className="text-xs sm:text-sm font-medium text-yellow-800 text-center sm:text-left">
+                                          Arkadaşlık Emojileri:
+                                        </span>
+                                        <div className="flex justify-center sm:justify-start space-x-1 sm:space-x-2">
+                                          {entry.emojis.map((emoji, index) => (
+                                            <span
+                                              key={index}
+                                              className="text-lg sm:text-xl animate-bounce"
+                                              style={{
+                                                animationDelay: `${
+                                                  index * 0.1
+                                                }s`,
+                                              }}
+                                            >
+                                              {emoji}
+                                            </span>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  {/* Mesaj İçeriği - Mobile Optimized */}
+                                  <div className="prose prose-sm max-w-none text-sm sm:text-base leading-relaxed">
+                                    <div className="break-words overflow-wrap-anywhere">
+                                      <ReactMarkdown
+                                        components={{
+                                          p: ({ children }) => (
+                                            <p className="mb-2 last:mb-0">
+                                              {children}
+                                            </p>
+                                          ),
+                                          strong: ({ children }) => (
+                                            <strong className="font-semibold text-gray-900">
+                                              {children}
+                                            </strong>
+                                          ),
+                                          em: ({ children }) => (
+                                            <em className="italic text-gray-700">
+                                              {children}
+                                            </em>
+                                          ),
+                                          ul: ({ children }) => (
+                                            <ul className="list-disc list-inside space-y-1 my-2">
+                                              {children}
+                                            </ul>
+                                          ),
+                                          ol: ({ children }) => (
+                                            <ol className="list-decimal list-inside space-y-1 my-2">
+                                              {children}
+                                            </ol>
+                                          ),
+                                          blockquote: ({ children }) => (
+                                            <blockquote className="border-l-4 border-gray-300 pl-3 italic text-gray-600 my-2">
+                                              {children}
+                                            </blockquote>
+                                          ),
+                                        }}
+                                      >
+                                        {entry.content}
+                                      </ReactMarkdown>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))
+                      );
+                    })
                   )}
                 </div>
               </div>
