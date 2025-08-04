@@ -1,13 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useForm } from "react-hook-form";
-import { Mail, Lock, User, AlertCircle, CheckCircle } from "lucide-react";
+import {
+  Mail,
+  Lock,
+  User,
+  AlertCircle,
+  CheckCircle,
+  Check,
+  X,
+} from "lucide-react";
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [password, setPassword] = useState("");
+  const [passwordCriteria, setPasswordCriteria] = useState({
+    length: false,
+    hasLetter: false,
+    hasNumber: false,
+    hasSpecial: false,
+  });
   const { login, signup } = useAuth();
 
   const {
@@ -28,7 +43,7 @@ export default function Login() {
         await login(data.email, data.password);
       } else {
         await signup(data.email, data.password, data.firstName, data.lastName);
-        setMessage("Kayıt başarılı! Giriş yapabilirsiniz.");
+        setMessage("Kayıt başarılı! Lütfen e-posta adresinizi doğrulayın.");
       }
     } catch (error) {
       setError(error.message);
@@ -36,10 +51,23 @@ export default function Login() {
     setLoading(false);
   };
 
+  // Şifre kriterlerini kontrol et
+  useEffect(() => {
+    if (!isLogin) {
+      setPasswordCriteria({
+        length: password.length >= 6,
+        hasLetter: /[A-Za-z]/.test(password),
+        hasNumber: /[0-9]/.test(password),
+        hasSpecial: /[.@$!%*#?&_\-+]/.test(password),
+      });
+    }
+  }, [password, isLogin]);
+
   const toggleMode = () => {
     setIsLogin(!isLogin);
     setError("");
     setMessage("");
+    setPassword("");
     reset();
   };
 
@@ -139,9 +167,14 @@ export default function Login() {
                 type="email"
                 {...register("email", {
                   required: "E-posta adresi gerekli",
+                  pattern: {
+                    value: /@istun\.edu\.tr$/,
+                    message:
+                      "Yalnızca @istun.edu.tr uzantılı e-posta adresleri kabul edilmektedir",
+                  },
                 })}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#aa2d3a] focus:border-transparent"
-                placeholder="E-posta adresiniz"
+                placeholder="ad.soyad@istun.edu.tr"
               />
             </div>
             {errors.email && (
@@ -161,15 +194,105 @@ export default function Login() {
                 type="password"
                 {...register("password", {
                   required: "Şifre gerekli",
+                  ...(isLogin
+                    ? {}
+                    : {
+                        minLength: {
+                          value: 6,
+                          message: "Şifre en az 6 karakter olmalı",
+                        },
+                        pattern: {
+                          value:
+                            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[.@$!%*#?&_\-+])[A-Za-z\d.@$!%*#?&_\-+]{6,}$/,
+                          message:
+                            "Şifre en az bir harf, bir rakam ve bir özel karakter içermeli",
+                        },
+                      }),
                 })}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#aa2d3a] focus:border-transparent"
                 placeholder="Şifrenizi girin"
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">
                 {errors.password.message}
               </p>
+            )}
+
+            {!isLogin && (
+              <div className="mt-2 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                <h4 className="text-sm font-medium text-gray-700 mb-2">
+                  Şifre Gereksinimleri:
+                </h4>
+                <ul className="space-y-1">
+                  <li className="flex items-center text-sm">
+                    {passwordCriteria.length ? (
+                      <Check className="w-4 h-4 text-green-500 mr-2" />
+                    ) : (
+                      <X className="w-4 h-4 text-red-500 mr-2" />
+                    )}
+                    <span
+                      className={
+                        passwordCriteria.length
+                          ? "text-green-700"
+                          : "text-gray-600"
+                      }
+                    >
+                      En az 6 karakter
+                    </span>
+                  </li>
+                  <li className="flex items-center text-sm">
+                    {passwordCriteria.hasLetter ? (
+                      <Check className="w-4 h-4 text-green-500 mr-2" />
+                    ) : (
+                      <X className="w-4 h-4 text-red-500 mr-2" />
+                    )}
+                    <span
+                      className={
+                        passwordCriteria.hasLetter
+                          ? "text-green-700"
+                          : "text-gray-600"
+                      }
+                    >
+                      En az bir harf
+                    </span>
+                  </li>
+                  <li className="flex items-center text-sm">
+                    {passwordCriteria.hasNumber ? (
+                      <Check className="w-4 h-4 text-green-500 mr-2" />
+                    ) : (
+                      <X className="w-4 h-4 text-red-500 mr-2" />
+                    )}
+                    <span
+                      className={
+                        passwordCriteria.hasNumber
+                          ? "text-green-700"
+                          : "text-gray-600"
+                      }
+                    >
+                      En az bir rakam
+                    </span>
+                  </li>
+                  <li className="flex items-center text-sm">
+                    {passwordCriteria.hasSpecial ? (
+                      <Check className="w-4 h-4 text-green-500 mr-2" />
+                    ) : (
+                      <X className="w-4 h-4 text-red-500 mr-2" />
+                    )}
+                    <span
+                      className={
+                        passwordCriteria.hasSpecial
+                          ? "text-green-700"
+                          : "text-gray-600"
+                      }
+                    >
+                      En az bir özel karakter (., @, $, !, %, *, #, ?, &, _, -,
+                      +)
+                    </span>
+                  </li>
+                </ul>
+              </div>
             )}
           </div>
 
