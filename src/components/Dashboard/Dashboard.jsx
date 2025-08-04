@@ -41,7 +41,11 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("dashboard"); // "dashboard" veya "settings"
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [revealedEntries, setRevealedEntries] = useState(new Set());
+  const [revealedEntries, setRevealedEntries] = useState(() => {
+    // localStorage'dan açılmış mesajları yükle
+    const saved = localStorage.getItem(`revealedEntries_${currentUser?.uid}`);
+    return saved ? new Set(JSON.parse(saved)) : new Set();
+  });
   const [showQRCode, setShowQRCode] = useState(false);
   const qrCodeRef = useRef(null);
 
@@ -113,6 +117,16 @@ export default function Dashboard() {
     return () => unsubscribe();
   }, [currentUser]);
 
+  // currentUser değiştiğinde localStorage'dan açılmış mesajları yükle
+  useEffect(() => {
+    if (currentUser) {
+      const saved = localStorage.getItem(`revealedEntries_${currentUser.uid}`);
+      if (saved) {
+        setRevealedEntries(new Set(JSON.parse(saved)));
+      }
+    }
+  }, [currentUser]);
+
   const generateInviteCode = () => {
     return (
       Math.random().toString(36).substring(2, 15) +
@@ -151,7 +165,15 @@ export default function Dashboard() {
   };
 
   const revealSurprise = (entryId) => {
-    setRevealedEntries((prev) => new Set([...prev, entryId]));
+    setRevealedEntries((prev) => {
+      const newSet = new Set([...prev, entryId]);
+      // localStorage'a kaydet
+      localStorage.setItem(
+        `revealedEntries_${currentUser.uid}`,
+        JSON.stringify([...newSet])
+      );
+      return newSet;
+    });
   };
 
   const generateQRCode = async () => {
