@@ -71,48 +71,1147 @@ export default function WriteEntry() {
     }
   }, [inviteCode]);
 
-  // Emoji seçimi için sabit emoji listesi
+  // Emoji seçimi için kapsamlı emoji listesi
   const availableEmojis = [
-    "😊",
+    // Yüz ifadeleri ve duygular
+    "😀",
+    "😃",
     "😄",
+    "😁",
+    "😆",
+    "😅",
+    "🤣",
+    "😂",
+    "🙂",
+    "🙃",
+    "😉",
+    "😊",
+    "😇",
     "🥰",
     "😍",
+    "🤩",
+    "😘",
+    "😗",
+    "☺️",
+    "😚",
+    "😙",
+    "🥲",
+    "😋",
+    "😛",
+    "😜",
+    "🤪",
+    "😝",
+    "🤑",
     "🤗",
+    "🤭",
+    "🤫",
+    "🤔",
+    "🤐",
+    "🤨",
+    "😐",
+    "😑",
+    "😶",
+    "😏",
+    "😒",
+    "🙄",
+    "😬",
+    "🤥",
+    "😌",
+    "😔",
+    "😪",
+    "🤤",
+    "😴",
+    "😷",
+    "🤒",
+    "🤕",
+    "🤢",
+    "🤮",
+    "🤧",
+    "🥵",
+    "🥶",
+    "🥴",
+    "😵",
+    "🤯",
+    "🤠",
+    "🥳",
+    "🥸",
     "😎",
-    "🤝",
-    "💫",
-    "⭐",
-    "✨",
-    "🎉",
-    "🎊",
-    "🎈",
-    "🎁",
-    "🌟",
-    "💖",
-    "💕",
-    "❤️",
-    "💙",
-    "💜",
-    "🌈",
-    "🦋",
-    "🌸",
-    "🌺",
-    "🌻",
-    "🎯",
-    "🏆",
-    "👑",
-    "🎭",
-    "🎨",
-    "📚",
-    "✏️",
-    "🎓",
-    "🚀",
-    "💎",
-    "🔥",
-    "💯",
+    "🤓",
+    "🧐",
+    "😕",
+    "😟",
+    "🙁",
+    "☹️",
+    "😮",
+    "😯",
+    "😲",
+    "😳",
+    "🥺",
+    "😦",
+    "😧",
+    "😨",
+    "😰",
+    "😥",
+    "😢",
+    "😭",
+    "😱",
+    "😖",
+    "😣",
+    "😞",
+    "😓",
+    "😩",
+    "😫",
+    "🥱",
+    "😤",
+    "😡",
+    "😠",
+    "🤬",
+    "😈",
+    "👿",
+    "💀",
+    "☠️",
+    "💩",
+    "🤡",
+    "👹",
+    "👺",
+    "👻",
+    "👽",
+    "👾",
+    "🤖",
+    "😺",
+    "😸",
+    "😹",
+    "😻",
+    "😼",
+    "😽",
+    "🙀",
+    "😿",
+    "😾",
+
+    // El işaretleri
+    "👋",
+    "🤚",
+    "🖐️",
+    "✋",
+    "🖖",
+    "👌",
+    "🤌",
+    "🤏",
+    "✌️",
+    "🤞",
+    "🤟",
+    "🤘",
+    "🤙",
+    "👈",
+    "👉",
+    "👆",
+    "🖕",
+    "👇",
+    "☝️",
+    "👍",
+    "👎",
+    "👊",
+    "✊",
+    "🤛",
+    "🤜",
     "👏",
     "🙌",
-    "✌️",
+    "👐",
+    "🤲",
+    "🤝",
+    "🙏",
+    "✍️",
+    "💅",
+    "🤳",
+    "💪",
+    "🦾",
+    "🦿",
+    "🦵",
+    "🦶",
+    "👂",
+    "🦻",
+    "👃",
+    "🧠",
+    "🫀",
+    "🫁",
+    "🦷",
+    "🦴",
+    "👀",
+    "👁️",
+    "👅",
+    "👄",
+    "💋",
+    "🩸",
+
+    // İnsanlar ve aktiviteler
+    "👶",
+    "🧒",
+    "👦",
+    "👧",
+    "🧑",
+    "👱",
+    "👨",
+    "🧔",
+    "👩",
+    "🧓",
+    "👴",
+    "👵",
+    "🙍",
+    "🙎",
+    "🙅",
+    "🙆",
+    "💁",
+    "🙋",
+    "🧏",
+    "🙇",
+    "🤦",
+    "🤷",
+    "👮",
+    "🕵️",
+    "💂",
+    "🥷",
+    "👷",
+    "🤴",
+    "👸",
+    "👳",
+    "👲",
+    "🧕",
+    "🤵",
+    "👰",
+    "🤰",
+    "🤱",
+    "👼",
+    "🎅",
+    "🤶",
+    "🦸",
+    "🦹",
+    "🧙",
+    "🧚",
+    "🧛",
+    "🧜",
+    "🧝",
+    "🧞",
+    "🧟",
+    "💆",
+    "💇",
+    "🚶",
+    "🧍",
+    "🏃",
+    "💃",
+    "🕺",
+    "🕴️",
+    "👯",
+    "🧖",
+    "🧗",
+    "🤺",
+    "🏇",
+    "⛷️",
+    "🏂",
+    "🏌️",
+    "🏄",
+    "🚣",
+    "🏊",
+    "⛹️",
+    "🏋️",
+    "🚴",
+    "🚵",
+    "🤸",
+    "🤼",
+    "🤽",
+    "🤾",
+    "🤹",
+    "🧘",
+    "🛀",
+    "🛌",
+
+    // Kalpler ve aşk
+    "❤️",
+    "🧡",
+    "💛",
+    "💚",
+    "💙",
+    "💜",
+    "🤎",
+    "🖤",
+    "🤍",
+    "💔",
+    "❣️",
+    "💕",
+    "💞",
+    "💓",
+    "💗",
+    "💖",
+    "💘",
+    "💝",
+    "💟",
+    "♥️",
+    "💒",
+    "💍",
+    "💎",
+    "🌹",
+    "🌷",
+    "🌺",
+    "🌸",
+    "🌼",
+    "🌻",
+    "💐",
+
+    // Doğa ve hayvanlar
+    "🐶",
+    "🐱",
+    "🐭",
+    "🐹",
+    "🐰",
+    "🦊",
+    "🐻",
+    "🐼",
+    "🐨",
+    "🐯",
+    "🦁",
+    "🐮",
+    "🐷",
+    "🐽",
+    "🐸",
+    "🐵",
+    "🙈",
+    "🙉",
+    "🙊",
+    "🐒",
+    "🐔",
+    "🐧",
+    "🐦",
+    "🐤",
+    "🐣",
+    "🐥",
+    "🦆",
+    "🦅",
+    "🦉",
+    "🦇",
+    "🐺",
+    "🐗",
+    "🐴",
+    "🦄",
+    "🐝",
+    "🐛",
+    "🦋",
+    "🐌",
+    "🐞",
+    "🐜",
+    "🦟",
+    "🦗",
+    "🕷️",
+    "🕸️",
+    "🦂",
+    "🐢",
+    "🐍",
+    "🦎",
+    "🦖",
+    "🦕",
+    "🐙",
+    "🦑",
+    "🦐",
+    "🦞",
+    "🦀",
+    "🐡",
+    "🐠",
+    "🐟",
+    "🐬",
+    "🐳",
+    "🐋",
+    "🦈",
+    "🐊",
+    "🐅",
+    "🐆",
+    "🦓",
+    "🦍",
+    "🦧",
+    "🐘",
+    "🦛",
+    "🦏",
+    "🐪",
+    "🐫",
+    "🦒",
+    "🦘",
+    "🐃",
+    "🐂",
+    "🐄",
+    "🐎",
+    "🐖",
+    "🐏",
+    "🐑",
+    "🦙",
+    "🐐",
+    "🦌",
+    "🐕",
+    "🐩",
+    "🦮",
+    "🐕‍🦺",
+    "🐈",
+    "🐓",
+    "🦃",
+    "🦚",
+    "🦜",
+    "🦢",
+    "🦩",
+    "🕊️",
+    "🐇",
+    "🦝",
+    "🦨",
+    "🦡",
+    "🦦",
+    "🦥",
+    "🐁",
+    "🐀",
+    "🐿️",
+    "🦔",
+
+    // Yiyecek ve içecek
+    "🍎",
+    "🍐",
+    "🍊",
+    "🍋",
+    "🍌",
+    "🍉",
+    "🍇",
+    "🍓",
+    "🫐",
+    "🍈",
+    "🍒",
+    "🍑",
+    "🥭",
+    "🍍",
+    "🥥",
+    "🥝",
+    "🍅",
+    "🍆",
+    "🥑",
+    "🥦",
+    "🥬",
+    "🥒",
+    "🌶️",
+    "🫑",
+    "🌽",
+    "🥕",
+    "🧄",
+    "🧅",
+    "🥔",
+    "🍠",
+    "🥐",
+    "🥖",
+    "🍞",
+    "🥨",
+    "🥯",
+    "🧀",
+    "🥚",
+    "🍳",
+    "🧈",
+    "🥞",
+    "🧇",
+    "🥓",
+    "🥩",
+    "🍗",
+    "🍖",
+    "🦴",
+    "🌭",
+    "🍔",
+    "🍟",
+    "🍕",
+    "🥪",
+    "🥙",
+    "🧆",
+    "🌮",
+    "🌯",
+    "🫔",
+    "🥗",
+    "🥘",
+    "🫕",
+    "🥫",
+    "🍝",
+    "🍜",
+    "🍲",
+    "🍛",
+    "🍣",
+    "🍱",
+    "🥟",
+    "🦪",
+    "🍤",
+    "🍙",
+    "🍚",
+    "🍘",
+    "🍥",
+    "🥠",
+    "🥮",
+    "🍢",
+    "🍡",
+    "🍧",
+    "🍨",
+    "🍦",
+    "🥧",
+    "🧁",
+    "🍰",
+    "🎂",
+    "🍮",
+    "🍭",
+    "🍬",
+    "🍫",
+    "🍿",
+    "🍩",
+    "🍪",
+    "🌰",
+    "🥜",
+    "🍯",
+    "🥛",
+    "🍼",
+    "☕",
+    "🫖",
+    "🍵",
+    "🧃",
+    "🥤",
+    "🧋",
+    "🍶",
+    "🍺",
+    "🍻",
+    "🥂",
+    "🍷",
+    "🥃",
+    "🍸",
+    "🍹",
+    "🧉",
+    "🍾",
+
+    // Aktiviteler ve spor
+    "⚽",
+    "🏀",
+    "🏈",
+    "⚾",
+    "🥎",
+    "🎾",
+    "🏐",
+    "🏉",
+    "🥏",
+    "🎱",
+    "🪀",
+    "🏓",
+    "🏸",
+    "🏒",
+    "🏑",
+    "🥍",
+    "🏏",
+    "🪃",
+    "🥅",
+    "⛳",
+    "🪁",
+    "🏹",
+    "🎣",
+    "🤿",
+    "🥊",
+    "🥋",
+    "🎽",
+    "🛹",
+    "🛷",
+    "⛸️",
+    "🥌",
+    "🎿",
+    "⛷️",
+    "🏂",
+    "🪂",
+    "🏋️‍♀️",
+    "🏋️",
+    "🏋️‍♂️",
+    "🤼‍♀️",
+    "🤼",
+    "🤼‍♂️",
+    "🤸‍♀️",
+    "🤸",
+    "🤸‍♂️",
+    "⛹️‍♀️",
+    "⛹️",
+    "⛹️‍♂️",
+    "🤺",
+    "🤾‍♀️",
+    "🤾",
+    "🤾‍♂️",
+    "🏌️‍♀️",
+    "🏌️",
+    "🏌️‍♂️",
+    "🏇",
+    "🧘‍♀️",
+    "🧘",
+    "🧘‍♂️",
+    "🏄‍♀️",
+    "🏄",
+    "🏄‍♂️",
+    "🏊‍♀️",
+    "🏊",
+    "🏊‍♂️",
+    "🤽‍♀️",
+    "🤽",
+    "🤽‍♂️",
+    "🚣‍♀️",
+    "🚣",
+    "🚣‍♂️",
+    "🧗‍♀️",
+    "🧗",
+    "🧗‍♂️",
+    "🚵‍♀️",
+    "🚵",
+    "🚵‍♂️",
+    "🚴‍♀️",
+    "🚴",
+    "🚴‍♂️",
+
+    // Nesneler ve semboller
+    "🎨",
+    "🖌️",
+    "🖍️",
+    "📝",
+    "✏️",
+    "🖊️",
+    "🖋️",
+    "✒️",
+    "🖇️",
+    "📎",
+    "📐",
+    "📏",
+    "📌",
+    "📍",
+    "🧮",
+    "🔗",
+    "⛓️",
+    "🧲",
+    "🔬",
+    "🔭",
+    "📡",
+    "💉",
+    "🩹",
+    "🩺",
+    "🏺",
+    "🗿",
+    "🪨",
+    "🪵",
+    "🛎️",
+    "🔔",
+    "🔕",
+    "🎵",
+    "🎶",
+    "🎼",
+    "🎹",
+    "🥁",
+    "🎷",
+    "🎺",
+    "🎸",
+    "🪕",
+    "🎻",
+    "🎤",
+    "🎧",
+    "📻",
+    "🎬",
+    "🎭",
+    "🎪",
+    "🎨",
+    "🎯",
+    "🎳",
+    "🎮",
+    "🎰",
+    "🧩",
+    "🃏",
+    "🀄",
+    "🎴",
+    "🎲",
+    "♠️",
+    "♥️",
+    "♦️",
+    "♣️",
+    "♟️",
+    "🏆",
+    "🥇",
+    "🥈",
+    "🥉",
+    "🏅",
+    "🎖️",
+    "🏵️",
+    "🎗️",
+    "🎫",
+    "🎟️",
+    "🎪",
+    "🤹",
+    "🤹‍♀️",
+    "🤹‍♂️",
+    "🎨",
+    "🎭",
+    "🩰",
+    "🎪",
+
+    // Doğa ve hava
+    "🌍",
+    "🌎",
+    "🌏",
+    "🌐",
+    "🗺️",
+    "🗾",
+    "🧭",
+    "🏔️",
+    "⛰️",
+    "🌋",
+    "🗻",
+    "🏕️",
+    "🏖️",
+    "🏜️",
+    "🏝️",
+    "🏞️",
+    "🏟️",
+    "🏛️",
+    "🏗️",
+    "🧱",
+    "🪨",
+    "🪵",
+    "🛖",
+    "🏘️",
+    "🏚️",
+    "🏠",
+    "🏡",
+    "🏢",
+    "🏣",
+    "🏤",
+    "🏥",
+    "🏦",
+    "🏨",
+    "🏩",
+    "🏪",
+    "🏫",
+    "🏬",
+    "🏭",
+    "🏯",
+    "🏰",
+    "💒",
+    "🗼",
+    "🗽",
+    "⛪",
+    "🕌",
+    "🛕",
+    "🕍",
+    "⛩️",
+    "🕋",
+    "⛲",
+    "⛺",
+    "🌁",
+    "🌃",
+    "🏙️",
+    "🌄",
+    "🌅",
+    "🌆",
+    "🌇",
+    "🌉",
+    "♨️",
+    "🎠",
+    "🎡",
+    "🎢",
+    "💈",
+    "🎪",
+    "🚂",
+    "🚃",
+    "🚄",
+    "🚅",
+    "🚆",
+    "🚇",
+    "🚈",
+    "🚉",
+    "🚊",
+    "🚝",
+    "🚞",
+    "🚋",
+    "🚌",
+    "🚍",
+    "🚎",
+    "🚐",
+    "🚑",
+    "🚒",
+    "🚓",
+    "🚔",
+    "🚕",
+    "🚖",
+    "🚗",
+    "🚘",
+    "🚙",
+    "🛻",
+    "🚚",
+    "🚛",
+    "🚜",
+    "🏎️",
+    "🏍️",
+    "🛵",
+    "🦽",
+    "🦼",
+    "🛺",
+    "🚲",
+    "🛴",
+    "🛹",
+    "🛼",
+    "🚁",
+    "🛸",
+    "✈️",
+    "🛩️",
+    "🛫",
+    "🛬",
+    "🪂",
+    "💺",
+    "🚀",
+    "🛰️",
+    "🚢",
+    "⛵",
+    "🚤",
+    "🛥️",
+    "🛳️",
+    "⛴️",
+    "🚧",
+    "⚓",
+    "⛽",
+    "🚨",
+    "🚥",
+    "🚦",
+    "🛑",
+    "🚏",
+    "🗺️",
+    "⛱️",
+    "🗿",
+    "🗽",
+    "🗼",
+    "🏰",
+    "🎡",
+    "🎢",
+    "🎠",
+
+    // Semboller ve işaretler
+    "❤️",
+    "🧡",
+    "💛",
+    "💚",
+    "💙",
+    "💜",
+    "🖤",
+    "🤍",
+    "🤎",
+    "💔",
+    "❣️",
+    "💕",
+    "💞",
+    "💓",
+    "💗",
+    "💖",
+    "💘",
+    "💝",
+    "💟",
+    "☮️",
+    "✝️",
+    "☪️",
+    "🕉️",
+    "☸️",
+    "✡️",
+    "🔯",
+    "🕎",
+    "☯️",
+    "☦️",
+    "🛐",
+    "⛎",
+    "♈",
+    "♉",
+    "♊",
+    "♋",
+    "♌",
+    "♍",
+    "♎",
+    "♏",
+    "♐",
+    "♑",
+    "♒",
+    "♓",
+    "🆔",
+    "⚛️",
+    "🉑",
+    "☢️",
+    "☣️",
+    "📴",
+    "📳",
+    "🈶",
+    "🈚",
+    "🈸",
+    "🈺",
+    "🈷️",
+    "✴️",
+    "🆚",
+    "💮",
+    "🉐",
+    "㊙️",
+    "㊗️",
+    "🈴",
+    "🈵",
+    "🈹",
+    "🈲",
+    "🅰️",
+    "🅱️",
+    "🆎",
+    "🆑",
+    "🅾️",
+    "🆘",
+    "❌",
+    "⭕",
+    "🛑",
+    "⛔",
+    "📛",
+    "🚫",
+    "💯",
+    "💢",
+    "♨️",
+    "🚷",
+    "🚯",
+    "🚳",
+    "🚱",
+    "🔞",
+    "📵",
+    "🚭",
+    "❗",
+    "❕",
+    "❓",
+    "❔",
+    "‼️",
+    "⁉️",
+    "🔅",
+    "🔆",
+    "〽️",
+    "⚠️",
+    "🚸",
+    "🔱",
+    "⚜️",
+    "🔰",
+    "♻️",
+    "✅",
+    "🈯",
+    "💹",
+    "❇️",
+    "✳️",
+    "❎",
+    "🌐",
+    "💠",
+    "Ⓜ️",
+    "🌀",
+    "💤",
+    "🏧",
+    "🚾",
+    "♿",
+    "🅿️",
+    "🈳",
+    "🈂️",
+    "🛂",
+    "🛃",
+    "🛄",
+    "🛅",
+    "🚹",
+    "🚺",
+    "🚼",
+    "🚻",
+    "🚮",
+    "🎦",
+    "📶",
+    "🈁",
+    "🔣",
+    "ℹ️",
+    "🔤",
+    "🔡",
+    "🔠",
+    "🆖",
+    "🆗",
+    "🆙",
+    "🆒",
+    "🆕",
+    "🆓",
+    "0️⃣",
+    "1️⃣",
+    "2️⃣",
+    "3️⃣",
+    "4️⃣",
+    "5️⃣",
+    "6️⃣",
+    "7️⃣",
+    "8️⃣",
+    "9️⃣",
+    "🔟",
+    "🔢",
+    "#️⃣",
+    "*️⃣",
+    "⏏️",
+    "▶️",
+    "⏸️",
+    "⏯️",
+    "⏹️",
+    "⏺️",
+    "⏭️",
+    "⏮️",
+    "⏩",
+    "⏪",
+    "⏫",
+    "⏬",
+    "◀️",
+    "🔼",
+    "🔽",
+    "➡️",
+    "⬅️",
+    "⬆️",
+    "⬇️",
+    "↗️",
+    "↘️",
+    "↙️",
+    "↖️",
+    "↕️",
+    "↔️",
+    "↪️",
+    "↩️",
+    "⤴️",
+    "⤵️",
+    "🔀",
+    "🔁",
+    "🔂",
+    "🔄",
+    "🔃",
+    "🎵",
+    "🎶",
+    "➕",
+    "➖",
+    "➗",
+    "✖️",
+    "♾️",
+    "💲",
+    "💱",
+    "™️",
+    "©️",
+    "®️",
+    "〰️",
+    "➰",
+    "➿",
+    "🔚",
+    "🔙",
+    "🔛",
+    "🔝",
+    "🔜",
+    "✔️",
+    "☑️",
+    "🔘",
+    "🔴",
+    "🟠",
+    "🟡",
+    "🟢",
+    "🔵",
+    "🟣",
+    "⚫",
+    "⚪",
+    "🟤",
+    "🔺",
+    "🔻",
+    "🔸",
+    "🔹",
+    "🔶",
+    "🔷",
+    "🔳",
+    "🔲",
+    "▪️",
+    "▫️",
+    "◾",
+    "◽",
+    "◼️",
+    "◻️",
+    "🟥",
+    "🟧",
+    "🟨",
+    "🟩",
+    "🟦",
+    "🟪",
+    "⬛",
+    "⬜",
+    "🟫",
+    "🔈",
+    "🔇",
+    "🔉",
+    "🔊",
+    "🔔",
+    "🔕",
+    "📣",
+    "📢",
+    "👁️‍🗨️",
+    "💬",
+    "💭",
+    "🗯️",
+    "♠️",
+    "♣️",
+    "♥️",
+    "♦️",
+    "🃏",
+    "🎴",
+    "🀄",
+    "🕐",
+    "🕑",
+    "🕒",
+    "🕓",
+    "🕔",
+    "🕕",
+    "🕖",
+    "🕗",
+    "🕘",
+    "🕙",
+    "🕚",
+    "🕛",
+    "🕜",
+    "🕝",
+    "🕞",
+    "🕟",
+    "🕠",
+    "🕡",
+    "🕢",
+    "🕣",
+    "🕤",
+    "🕥",
+    "🕦",
+    "🕧",
+
+    // Özel emojiler
+    "⭐",
+    "🌟",
+    "✨",
+    "🎇",
+    "🎆",
+    "🌠",
+    "🌌",
+    "🌙",
+    "🌛",
+    "🌜",
+    "🌚",
+    "🌝",
+    "🌞",
+    "🪐",
+    "💫",
+    "⚡",
+    "☄️",
+    "💥",
+    "🔥",
+    "🌪️",
+    "🌈",
+    "☀️",
+    "🌤️",
+    "⛅",
+    "🌦️",
+    "🌧️",
+    "⛈️",
+    "🌩️",
+    "🌨️",
+    "❄️",
+    "☃️",
+    "⛄",
+    "🌬️",
+    "💨",
+    "💧",
+    "💦",
+    "☔",
+    "☂️",
+    "🌊",
+    "🌫️",
   ];
 
   const handleEmojiSelect = (emoji) => {
@@ -395,31 +1494,361 @@ export default function WriteEntry() {
                 </div>
               </div>
 
-              {/* Emoji Grid */}
-              <div className="grid grid-cols-6 sm:grid-cols-8 lg:grid-cols-10 gap-1 sm:gap-2 p-2 sm:p-3 border border-gray-300 rounded-lg max-h-32 sm:max-h-40 overflow-y-auto">
-                {availableEmojis.map((emoji) => (
-                  <button
-                    key={emoji}
-                    type="button"
-                    onClick={() => handleEmojiSelect(emoji)}
-                    className={`text-lg sm:text-2xl p-1 sm:p-2 rounded-lg transition-all hover:bg-gray-100 ${
-                      selectedEmojis.includes(emoji)
-                        ? "bg-[#aa2d3a] bg-opacity-10 ring-1 sm:ring-2 ring-[#aa2d3a]"
-                        : "hover:scale-110"
-                    } ${
-                      selectedEmojis.length >= 3 &&
-                      !selectedEmojis.includes(emoji)
-                        ? "opacity-50 cursor-not-allowed"
-                        : "cursor-pointer"
-                    }`}
-                    disabled={
-                      selectedEmojis.length >= 3 &&
-                      !selectedEmojis.includes(emoji)
-                    }
-                  >
-                    {emoji}
-                  </button>
-                ))}
+              {/* Emoji Grid with Categories */}
+              <div className="border border-gray-300 rounded-lg max-h-60 sm:max-h-72 overflow-y-auto">
+                <div className="p-2 sm:p-3">
+                  {/* Yüz İfadeleri ve Duygular */}
+                  <div id="category-yuz-ifadeleri" className="mb-4">
+                    <h4 className="text-sm font-semibold text-[#aa2d3a] mb-2 px-1 border-b border-[#aa2d3a] pb-1">
+                      😊 Yüz İfadeleri ve Duygular
+                    </h4>
+                    <div className="grid grid-cols-6 sm:grid-cols-8 lg:grid-cols-10 gap-1 sm:gap-2">
+                      {availableEmojis.slice(0, 93).map((emoji) => (
+                        <button
+                          key={emoji}
+                          type="button"
+                          onClick={() => handleEmojiSelect(emoji)}
+                          className={`text-lg sm:text-2xl p-1 sm:p-2 rounded-lg transition-all hover:bg-gray-100 ${
+                            selectedEmojis.includes(emoji)
+                              ? "bg-[#aa2d3a] bg-opacity-10 ring-1 sm:ring-2 ring-[#aa2d3a]"
+                              : "hover:scale-110"
+                          } ${
+                            selectedEmojis.length >= 3 &&
+                            !selectedEmojis.includes(emoji)
+                              ? "opacity-50 cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
+                          disabled={
+                            selectedEmojis.length >= 3 &&
+                            !selectedEmojis.includes(emoji)
+                          }
+                        >
+                          {emoji}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* El İşaretleri */}
+                  <div id="category-el-isaretleri" className="mb-4">
+                    <h4 className="text-sm font-semibold text-[#aa2d3a] mb-2 px-1 border-b border-[#aa2d3a] pb-1">
+                      👋 El İşaretleri
+                    </h4>
+                    <div className="grid grid-cols-6 sm:grid-cols-8 lg:grid-cols-10 gap-1 sm:gap-2">
+                      {availableEmojis.slice(93, 116).map((emoji) => (
+                        <button
+                          key={emoji}
+                          type="button"
+                          onClick={() => handleEmojiSelect(emoji)}
+                          className={`text-lg sm:text-2xl p-1 sm:p-2 rounded-lg transition-all hover:bg-gray-100 ${
+                            selectedEmojis.includes(emoji)
+                              ? "bg-[#aa2d3a] bg-opacity-10 ring-1 sm:ring-2 ring-[#aa2d3a]"
+                              : "hover:scale-110"
+                          } ${
+                            selectedEmojis.length >= 3 &&
+                            !selectedEmojis.includes(emoji)
+                              ? "opacity-50 cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
+                          disabled={
+                            selectedEmojis.length >= 3 &&
+                            !selectedEmojis.includes(emoji)
+                          }
+                        >
+                          {emoji}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* İnsanlar ve Aktiviteler */}
+                  <div id="category-insanlar" className="mb-4">
+                    <h4 className="text-sm font-semibold text-[#aa2d3a] mb-2 px-1 border-b border-[#aa2d3a] pb-1">
+                      👨‍👩‍👧‍👦 İnsanlar ve Aktiviteler
+                    </h4>
+                    <div className="grid grid-cols-6 sm:grid-cols-8 lg:grid-cols-10 gap-1 sm:gap-2">
+                      {availableEmojis.slice(116, 155).map((emoji) => (
+                        <button
+                          key={emoji}
+                          type="button"
+                          onClick={() => handleEmojiSelect(emoji)}
+                          className={`text-lg sm:text-2xl p-1 sm:p-2 rounded-lg transition-all hover:bg-gray-100 ${
+                            selectedEmojis.includes(emoji)
+                              ? "bg-[#aa2d3a] bg-opacity-10 ring-1 sm:ring-2 ring-[#aa2d3a]"
+                              : "hover:scale-110"
+                          } ${
+                            selectedEmojis.length >= 3 &&
+                            !selectedEmojis.includes(emoji)
+                              ? "opacity-50 cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
+                          disabled={
+                            selectedEmojis.length >= 3 &&
+                            !selectedEmojis.includes(emoji)
+                          }
+                        >
+                          {emoji}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Kalpler ve Aşk */}
+                  <div id="category-kalpler" className="mb-4">
+                    <h4 className="text-sm font-semibold text-[#aa2d3a] mb-2 px-1 border-b border-[#aa2d3a] pb-1">
+                      ❤️ Kalpler ve Aşk
+                    </h4>
+                    <div className="grid grid-cols-6 sm:grid-cols-8 lg:grid-cols-10 gap-1 sm:gap-2">
+                      {availableEmojis.slice(155, 185).map((emoji) => (
+                        <button
+                          key={emoji}
+                          type="button"
+                          onClick={() => handleEmojiSelect(emoji)}
+                          className={`text-lg sm:text-2xl p-1 sm:p-2 rounded-lg transition-all hover:bg-gray-100 ${
+                            selectedEmojis.includes(emoji)
+                              ? "bg-[#aa2d3a] bg-opacity-10 ring-1 sm:ring-2 ring-[#aa2d3a]"
+                              : "hover:scale-110"
+                          } ${
+                            selectedEmojis.length >= 3 &&
+                            !selectedEmojis.includes(emoji)
+                              ? "opacity-50 cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
+                          disabled={
+                            selectedEmojis.length >= 3 &&
+                            !selectedEmojis.includes(emoji)
+                          }
+                        >
+                          {emoji}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Doğa ve Hayvanlar */}
+                  <div id="category-hayvanlar" className="mb-4">
+                    <h4 className="text-sm font-semibold text-[#aa2d3a] mb-2 px-1 border-b border-[#aa2d3a] pb-1">
+                      🐶 Doğa ve Hayvanlar
+                    </h4>
+                    <div className="grid grid-cols-6 sm:grid-cols-8 lg:grid-cols-10 gap-1 sm:gap-2">
+                      {availableEmojis.slice(185, 252).map((emoji) => (
+                        <button
+                          key={emoji}
+                          type="button"
+                          onClick={() => handleEmojiSelect(emoji)}
+                          className={`text-lg sm:text-2xl p-1 sm:p-2 rounded-lg transition-all hover:bg-gray-100 ${
+                            selectedEmojis.includes(emoji)
+                              ? "bg-[#aa2d3a] bg-opacity-10 ring-1 sm:ring-2 ring-[#aa2d3a]"
+                              : "hover:scale-110"
+                          } ${
+                            selectedEmojis.length >= 3 &&
+                            !selectedEmojis.includes(emoji)
+                              ? "opacity-50 cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
+                          disabled={
+                            selectedEmojis.length >= 3 &&
+                            !selectedEmojis.includes(emoji)
+                          }
+                        >
+                          {emoji}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Yiyecek ve İçecek */}
+                  <div id="category-yiyecek" className="mb-4">
+                    <h4 className="text-sm font-semibold text-[#aa2d3a] mb-2 px-1 border-b border-[#aa2d3a] pb-1">
+                      🍔 Yiyecek ve İçecek
+                    </h4>
+                    <div className="grid grid-cols-6 sm:grid-cols-8 lg:grid-cols-10 gap-1 sm:gap-2">
+                      {availableEmojis.slice(252, 332).map((emoji) => (
+                        <button
+                          key={emoji}
+                          type="button"
+                          onClick={() => handleEmojiSelect(emoji)}
+                          className={`text-lg sm:text-2xl p-1 sm:p-2 rounded-lg transition-all hover:bg-gray-100 ${
+                            selectedEmojis.includes(emoji)
+                              ? "bg-[#aa2d3a] bg-opacity-10 ring-1 sm:ring-2 ring-[#aa2d3a]"
+                              : "hover:scale-110"
+                          } ${
+                            selectedEmojis.length >= 3 &&
+                            !selectedEmojis.includes(emoji)
+                              ? "opacity-50 cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
+                          disabled={
+                            selectedEmojis.length >= 3 &&
+                            !selectedEmojis.includes(emoji)
+                          }
+                        >
+                          {emoji}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Aktiviteler ve Spor */}
+                  <div id="category-spor" className="mb-4">
+                    <h4 className="text-sm font-semibold text-[#aa2d3a] mb-2 px-1 border-b border-[#aa2d3a] pb-1">
+                      ⚽ Aktiviteler ve Spor
+                    </h4>
+                    <div className="grid grid-cols-6 sm:grid-cols-8 lg:grid-cols-10 gap-1 sm:gap-2">
+                      {availableEmojis.slice(332, 380).map((emoji) => (
+                        <button
+                          key={emoji}
+                          type="button"
+                          onClick={() => handleEmojiSelect(emoji)}
+                          className={`text-lg sm:text-2xl p-1 sm:p-2 rounded-lg transition-all hover:bg-gray-100 ${
+                            selectedEmojis.includes(emoji)
+                              ? "bg-[#aa2d3a] bg-opacity-10 ring-1 sm:ring-2 ring-[#aa2d3a]"
+                              : "hover:scale-110"
+                          } ${
+                            selectedEmojis.length >= 3 &&
+                            !selectedEmojis.includes(emoji)
+                              ? "opacity-50 cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
+                          disabled={
+                            selectedEmojis.length >= 3 &&
+                            !selectedEmojis.includes(emoji)
+                          }
+                        >
+                          {emoji}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Nesneler ve Semboller */}
+                  <div id="category-nesneler" className="mb-4">
+                    <h4 className="text-sm font-semibold text-[#aa2d3a] mb-2 px-1 border-b border-[#aa2d3a] pb-1">
+                      🎨 Nesneler ve Semboller
+                    </h4>
+                    <div className="grid grid-cols-6 sm:grid-cols-8 lg:grid-cols-10 gap-1 sm:gap-2">
+                      {availableEmojis.slice(380, 439).map((emoji) => (
+                        <button
+                          key={emoji}
+                          type="button"
+                          onClick={() => handleEmojiSelect(emoji)}
+                          className={`text-lg sm:text-2xl p-1 sm:p-2 rounded-lg transition-all hover:bg-gray-100 ${
+                            selectedEmojis.includes(emoji)
+                              ? "bg-[#aa2d3a] bg-opacity-10 ring-1 sm:ring-2 ring-[#aa2d3a]"
+                              : "hover:scale-110"
+                          } ${
+                            selectedEmojis.length >= 3 &&
+                            !selectedEmojis.includes(emoji)
+                              ? "opacity-50 cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
+                          disabled={
+                            selectedEmojis.length >= 3 &&
+                            !selectedEmojis.includes(emoji)
+                          }
+                        >
+                          {emoji}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Doğa ve Hava */}
+                  <div id="category-doga" className="mb-4">
+                    <h4 className="text-sm font-semibold text-[#aa2d3a] mb-2 px-1 border-b border-[#aa2d3a] pb-1">
+                      🌍 Doğa ve Hava
+                    </h4>
+                    <div className="grid grid-cols-6 sm:grid-cols-8 lg:grid-cols-10 gap-1 sm:gap-2">
+                      {availableEmojis.slice(439, 514).map((emoji) => (
+                        <button
+                          key={emoji}
+                          type="button"
+                          onClick={() => handleEmojiSelect(emoji)}
+                          className={`text-lg sm:text-2xl p-1 sm:p-2 rounded-lg transition-all hover:bg-gray-100 ${
+                            selectedEmojis.includes(emoji)
+                              ? "bg-[#aa2d3a] bg-opacity-10 ring-1 sm:ring-2 ring-[#aa2d3a]"
+                              : "hover:scale-110"
+                          } ${
+                            selectedEmojis.length >= 3 &&
+                            !selectedEmojis.includes(emoji)
+                              ? "opacity-50 cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
+                          disabled={
+                            selectedEmojis.length >= 3 &&
+                            !selectedEmojis.includes(emoji)
+                          }
+                        >
+                          {emoji}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Semboller ve İşaretler */}
+                  <div id="category-semboller" className="mb-4">
+                    <h4 className="text-sm font-semibold text-[#aa2d3a] mb-2 px-1 border-b border-[#aa2d3a] pb-1">
+                      💠 Semboller ve İşaretler
+                    </h4>
+                    <div className="grid grid-cols-6 sm:grid-cols-8 lg:grid-cols-10 gap-1 sm:gap-2">
+                      {availableEmojis.slice(514, 644).map((emoji) => (
+                        <button
+                          key={emoji}
+                          type="button"
+                          onClick={() => handleEmojiSelect(emoji)}
+                          className={`text-lg sm:text-2xl p-1 sm:p-2 rounded-lg transition-all hover:bg-gray-100 ${
+                            selectedEmojis.includes(emoji)
+                              ? "bg-[#aa2d3a] bg-opacity-10 ring-1 sm:ring-2 ring-[#aa2d3a]"
+                              : "hover:scale-110"
+                          } ${
+                            selectedEmojis.length >= 3 &&
+                            !selectedEmojis.includes(emoji)
+                              ? "opacity-50 cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
+                          disabled={
+                            selectedEmojis.length >= 3 &&
+                            !selectedEmojis.includes(emoji)
+                          }
+                        >
+                          {emoji}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Özel Emojiler */}
+                  <div id="category-ozel" className="mb-4">
+                    <h4 className="text-sm font-semibold text-[#aa2d3a] mb-2 px-1 border-b border-[#aa2d3a] pb-1">
+                      ✨ Özel Emojiler
+                    </h4>
+                    <div className="grid grid-cols-6 sm:grid-cols-8 lg:grid-cols-10 gap-1 sm:gap-2">
+                      {availableEmojis.slice(644).map((emoji) => (
+                        <button
+                          key={emoji}
+                          type="button"
+                          onClick={() => handleEmojiSelect(emoji)}
+                          className={`text-lg sm:text-2xl p-1 sm:p-2 rounded-lg transition-all hover:bg-gray-100 ${
+                            selectedEmojis.includes(emoji)
+                              ? "bg-[#aa2d3a] bg-opacity-10 ring-1 sm:ring-2 ring-[#aa2d3a]"
+                              : "hover:scale-110"
+                          } ${
+                            selectedEmojis.length >= 3 &&
+                            !selectedEmojis.includes(emoji)
+                              ? "opacity-50 cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
+                          disabled={
+                            selectedEmojis.length >= 3 &&
+                            !selectedEmojis.includes(emoji)
+                          }
+                        >
+                          {emoji}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {selectedEmojis.length !== 3 && (
