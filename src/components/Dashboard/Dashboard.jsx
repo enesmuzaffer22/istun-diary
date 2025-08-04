@@ -588,7 +588,7 @@ export default function Dashboard() {
             {/* Sağ Panel - Mesajlar */}
             <div className="lg:col-span-2 space-y-6">
               {/* Geri Sayım Kartı */}
-              {!isRevealTime && (
+              {!isRevealTime ? (
                 <div className="bg-gradient-to-br from-purple-50 to-indigo-100 rounded-xl shadow-lg border border-purple-200 animate-fade-in">
                   <div className="p-4 sm:p-6">
                     <div className="text-center">
@@ -637,6 +637,28 @@ export default function Dashboard() {
                             Saniye
                           </div>
                         </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl shadow-lg border border-green-200 animate-fade-in">
+                  <div className="p-4 sm:p-6">
+                    <div className="text-center">
+                      <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                        <Gift className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-green-600 to-emerald-700 bg-clip-text text-transparent mb-2">
+                        🎉 Geri Sayım Bitti! 🎉
+                      </h3>
+                      <p className="text-sm sm:text-base text-gray-600 mb-4">
+                        Artık tüm sürpriz mesajlarını açabilirsin!
+                      </p>
+                      <div className="bg-white rounded-lg p-3 border border-green-200 shadow-sm">
+                        <p className="text-sm text-green-700 font-medium">
+                          Aşağıdaki "Sürprizi Aç!" butonlarına tıklayarak
+                          mesajlarını keşfet
+                        </p>
                       </div>
                     </div>
                   </div>
