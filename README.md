@@ -19,7 +19,7 @@ Bu uygulama, mezuniyet töreninde arkadaşlarınızın size özel mesajlar yazab
 
 - **Emoji Seçimi**: Her mesajla birlikte 3 adet emoji seçimi
 - **Sürpriz Açılış**: Mesajlar ve gönderen bilgileri sürpriz olarak açılır
-- **Zamanlı Açılış**: Tüm sürpriz mesajlar belirli bir tarihte (4 Ağustos 2025, 11:30) açılır
+- **Zamanlı Açılış**: Tüm sürpriz mesajlar belirli bir tarihte açılır
 - **Geri Sayım Timer**: Açılış tarihine kadar canlı geri sayım
 - **Kalıcı Durum**: Açılan mesajlar localStorage ile hatırlanır
 

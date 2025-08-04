@@ -32,8 +32,33 @@ import ReactMarkdown from "react-markdown";
 import ProfileSettings from "./ProfileSettings";
 import QRCode from "qrcode";
 
-// Sürpriz mesajların açılacağı tarih - 4 Ağustos 2025, 11:30
-const REVEAL_DATE = new Date("2025-08-04T22:00:00").getTime();
+const REVEAL_DATE = new Date("2025-08-05T09:45:00").getTime();
+
+// Tarihi Türkçe formatında gösterme fonksiyonu
+const formatRevealDate = (timestamp) => {
+  const date = new Date(timestamp);
+  const day = date.getDate();
+  const months = [
+    "Ocak",
+    "Şubat",
+    "Mart",
+    "Nisan",
+    "Mayıs",
+    "Haziran",
+    "Temmuz",
+    "Ağustos",
+    "Eylül",
+    "Ekim",
+    "Kasım",
+    "Aralık",
+  ];
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+
+  return `${day} ${month} ${year}, saat ${hours}:${minutes}`;
+};
 
 export default function Dashboard() {
   const { currentUser, logout } = useAuth();
@@ -599,8 +624,8 @@ export default function Dashboard() {
                         Sürpriz Mesajlar Yakında Açılacak!
                       </h3>
                       <p className="text-sm sm:text-base text-gray-600 mb-6">
-                        4 Ağustos 2025, Saat 11:30'da tüm sürpriz mesajlar
-                        açılacak
+                        {formatRevealDate(REVEAL_DATE)} tarihinde tüm sürpriz
+                        mesajlar açılacak
                       </p>
 
                       {/* Geri Sayım */}
