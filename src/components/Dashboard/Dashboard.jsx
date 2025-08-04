@@ -33,7 +33,7 @@ import ProfileSettings from "./ProfileSettings";
 import QRCode from "qrcode";
 
 // Sürpriz mesajların açılacağı tarih - 4 Ağustos 2025, 11:30
-const REVEAL_DATE = new Date("2025-08-04T11:30:00").getTime();
+const REVEAL_DATE = new Date("2025-08-04T22:00:00").getTime();
 
 export default function Dashboard() {
   const { currentUser, logout } = useAuth();
