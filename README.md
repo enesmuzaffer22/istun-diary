@@ -137,7 +137,7 @@ Bu uygulama, mezuniyet töreninde arkadaşlarınızın size özel mesajlar yazab
 
 ### 🎉 Sürpriz Mesajları Açma
 
-1. **4 Ağustos 2025, 11:30** tarihini bekleyin
+1. **Geri sayım** tarihini bekleyin
 2. **Geri sayım** tamamlandığında kutlama mesajı görünecek
 3. Mesajlarınızın yanındaki **"Sürprizi Aç!"** butonuna tıklayın
 4. **Gönderen adı, emojiler ve mesaj** sürpriz olarak açılacak
@@ -273,7 +273,7 @@ firebase deploy
 - [x] İSTÜN e-posta doğrulama sistemi
 - [x] Güçlü şifre gereksinimleri ve canlı validasyon
 - [x] Sürpriz mesaj sistemi (emoji seçimi ile)
-- [x] Zamanlı mesaj açılış sistemi (4 Ağustos 2025, 11:30)
+- [x] Zamanlı mesaj açılış sistemi
 - [x] Geri sayım timer'ı
 - [x] QR kod oluşturma ve paylaşım
 - [x] Responsive tasarım ve modern animasyonlar
