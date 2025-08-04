@@ -18,6 +18,7 @@ import {
   Copy,
   CheckCircle,
   User,
+  Clock,
   Calendar,
   Settings,
   Menu,
@@ -30,6 +31,9 @@ import {
 import ReactMarkdown from "react-markdown";
 import ProfileSettings from "./ProfileSettings";
 import QRCode from "qrcode";
+
+// Sürpriz mesajların açılacağı tarih - 4 Ağustos 2025, 11:30
+const REVEAL_DATE = new Date("2025-08-04T11:30:00").getTime();
 
 export default function Dashboard() {
   const { currentUser, logout } = useAuth();
@@ -48,6 +52,13 @@ export default function Dashboard() {
   });
   const [showQRCode, setShowQRCode] = useState(false);
   const qrCodeRef = useRef(null);
+  const [countdown, setCountdown] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+  const [isRevealTime, setIsRevealTime] = useState(false);
 
   useEffect(() => {
     if (!currentUser) return;
@@ -127,6 +138,34 @@ export default function Dashboard() {
     }
   }, [currentUser]);
 
+  // Geri sayım timer'ı
+  useEffect(() => {
+    const updateCountdown = () => {
+      const now = new Date().getTime();
+      const distance = REVEAL_DATE - now;
+
+      if (distance > 0) {
+        setCountdown({
+          days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+          hours: Math.floor(
+            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+          ),
+          minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+          seconds: Math.floor((distance % (1000 * 60)) / 1000),
+        });
+        setIsRevealTime(false);
+      } else {
+        setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        setIsRevealTime(true);
+      }
+    };
+
+    updateCountdown();
+    const timer = setInterval(updateCountdown, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   const generateInviteCode = () => {
     return (
       Math.random().toString(36).substring(2, 15) +
@@ -165,6 +204,11 @@ export default function Dashboard() {
   };
 
   const revealSurprise = (entryId) => {
+    // Eğer henüz açılış zamanı gelmemişse, açmaya izin verme
+    if (!isRevealTime) {
+      return;
+    }
+
     setRevealedEntries((prev) => {
       const newSet = new Set([...prev, entryId]);
       // localStorage'a kaydet
@@ -542,7 +586,63 @@ export default function Dashboard() {
             </div>
 
             {/* Sağ Panel - Mesajlar */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 space-y-6">
+              {/* Geri Sayım Kartı */}
+              {!isRevealTime && (
+                <div className="bg-gradient-to-br from-purple-50 to-indigo-100 rounded-xl shadow-lg border border-purple-200 animate-fade-in">
+                  <div className="p-4 sm:p-6">
+                    <div className="text-center">
+                      <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                        <Clock className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-purple-600 to-indigo-700 bg-clip-text text-transparent mb-2">
+                        Sürpriz Mesajlar Yakında Açılacak!
+                      </h3>
+                      <p className="text-sm sm:text-base text-gray-600 mb-6">
+                        4 Ağustos 2025, Saat 11:30'da tüm sürpriz mesajlar
+                        açılacak
+                      </p>
+
+                      {/* Geri Sayım */}
+                      <div className="grid grid-cols-4 gap-2 sm:gap-4 max-w-md mx-auto">
+                        <div className="bg-white rounded-lg p-2 sm:p-3 shadow-md border border-purple-100">
+                          <div className="text-xl sm:text-2xl font-bold text-purple-600">
+                            {countdown.days}
+                          </div>
+                          <div className="text-xs sm:text-sm text-gray-500 font-medium">
+                            Gün
+                          </div>
+                        </div>
+                        <div className="bg-white rounded-lg p-2 sm:p-3 shadow-md border border-purple-100">
+                          <div className="text-xl sm:text-2xl font-bold text-purple-600">
+                            {countdown.hours}
+                          </div>
+                          <div className="text-xs sm:text-sm text-gray-500 font-medium">
+                            Saat
+                          </div>
+                        </div>
+                        <div className="bg-white rounded-lg p-2 sm:p-3 shadow-md border border-purple-100">
+                          <div className="text-xl sm:text-2xl font-bold text-purple-600">
+                            {countdown.minutes}
+                          </div>
+                          <div className="text-xs sm:text-sm text-gray-500 font-medium">
+                            Dakika
+                          </div>
+                        </div>
+                        <div className="bg-white rounded-lg p-2 sm:p-3 shadow-md border border-purple-100">
+                          <div className="text-xl sm:text-2xl font-bold text-purple-600">
+                            {countdown.seconds}
+                          </div>
+                          <div className="text-xs sm:text-sm text-gray-500 font-medium">
+                            Saniye
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <div className="bg-gradient-to-br from-white to-pink-50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-pink-100 animate-fade-in">
                 <div className="p-4 sm:p-6 border-b border-pink-200/50">
                   <h2 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-[#aa2d3a] to-pink-600 bg-clip-text text-transparent flex items-center">
@@ -615,10 +715,24 @@ export default function Dashboard() {
                                   </div>
                                   <button
                                     onClick={() => revealSurprise(entry.id)}
-                                    className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg text-sm sm:text-base font-medium hover:from-purple-600 hover:to-pink-600 transition-all transform hover:scale-105 flex items-center mx-auto"
+                                    disabled={!isRevealTime}
+                                    className={`px-3 py-2 sm:px-4 sm:py-2 rounded-lg text-sm sm:text-base font-medium transition-all flex items-center mx-auto ${
+                                      isRevealTime
+                                        ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 transform hover:scale-105"
+                                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                    }`}
                                   >
-                                    <Gift className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                                    <span>Sürprizi Aç!</span>
+                                    {isRevealTime ? (
+                                      <>
+                                        <Gift className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                                        <span>Sürprizi Aç!</span>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <Clock className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                                        <span>Yakında Açılacak</span>
+                                      </>
+                                    )}
                                   </button>
                                 </div>
                               ) : (
