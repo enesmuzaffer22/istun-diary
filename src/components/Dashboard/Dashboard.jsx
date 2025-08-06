@@ -32,7 +32,7 @@ import ReactMarkdown from "react-markdown";
 import ProfileSettings from "./ProfileSettings";
 import QRCode from "qrcode";
 
-const REVEAL_DATE = new Date("2025-08-05T09:45:00").getTime();
+const REVEAL_DATE = new Date("2025-08-15T18:00:00").getTime();
 
 // Tarihi Türkçe formatında gösterme fonksiyonu
 const formatRevealDate = (timestamp) => {
